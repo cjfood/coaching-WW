@@ -1286,6 +1286,7 @@
                                 <th style="width: 140px;">Miền</th>
                                 <th style="width: 220px;">Vùng</th>
                                 <th class="text-center" style="width: 100px;">Số GSBH</th>
+                                <th class="text-center" style="width: 110px;">Target MTD</th>
                                 <th class="text-center" style="width: 130px;">Tổng Đăng Ký</th>
                                 <th class="text-center" style="width: 130px;">Tổng Hoàn Thành</th>
                                 <th class="text-center" style="width: 150px;">% Thực Hiện/Đăng Ký</th>
@@ -1347,8 +1348,9 @@
                                 <th class="sortable" onclick="sortTable('vung')">Vùng <i class="fa-solid fa-sort"></i></th>
                                 <th class="sortable" onclick="sortTable('ma_gsbh')">Mã GSBH <i class="fa-solid fa-sort"></i></th>
                                 <th class="sortable" onclick="sortTable('ten_gsbh')">Tên GSBH <i class="fa-solid fa-sort"></i></th>
-                                <th class="sortable text-center" onclick="sortTable('dang_ky_thang')">Đăng Ký Tháng <i class="fa-solid fa-sort"></i></th>
-                                <th class="sortable text-center" onclick="sortTable('hoan_thanh_thang')">Hoàn Thành Tháng <i class="fa-solid fa-sort"></i></th>
+                                <th class="sortable text-center" onclick="sortTable('target_mtd')">Target MTD <i class="fa-solid fa-sort"></i></th>
+                                <th class="sortable text-center" onclick="sortTable('dang_ky_thang')">Đăng Ký <i class="fa-solid fa-sort"></i></th>
+                                <th class="sortable text-center" onclick="sortTable('hoan_thanh_thang')">Hoàn Thành <i class="fa-solid fa-sort"></i></th>
                                 <th class="sortable text-center" onclick="sortTable('pct_dang_ky')">% Đăng Ký <i class="fa-solid fa-sort"></i></th>
                                 <th id="detail-target-header" class="sortable text-center" onclick="sortTable('pct_target')">% Target <i class="fa-solid fa-sort"></i></th>
                                 <!-- Week 1 -->
@@ -1683,6 +1685,7 @@
                     <td>${row.mien}</td>
                     <td>${row.vung}</td>
                     <td class="text-center val-num">${row.so_gsbh}</td>
+                    <td class="text-center val-num">${row.target_mtd}</td>
                     <td class="text-center val-num">${row.dang_ky}</td>
                     <td class="text-center val-num">${row.hoan_thanh}</td>
                     <td class="text-center val-pct">${(row.pct_dang_ky * 100).toFixed(1)}%</td>
@@ -1984,6 +1987,7 @@
                         <div class="gs-name">${row.ten_gsbh}</div>
                         <div class="gs-meta">${row.ma_gsbh} | ${row.mien} - ${row.vung}</div>
                     </td>
+                    <td class="text-center val-num">${row.target_mtd}</td>
                     <td class="text-center val-num">${row.dang_ky_thang}</td>
                     <td class="text-center val-num">${row.hoan_thanh_thang}</td>
                     <td class="text-center val-pct">${(row.pct_dang_ky * 100).toFixed(0)}%</td>
@@ -2186,6 +2190,7 @@
                 { header: 'Miền', key: 'mien', width: 15 },
                 { header: 'Vùng Bán Hàng', key: 'vung', width: 22 },
                 { header: 'Số GSBH', key: 'so_gsbh', width: 12, style: { alignment: { horizontal: 'center', vertical: 'middle' } } },
+                { header: 'Target MTD', key: 'target_mtd', width: 15, style: { alignment: { horizontal: 'center', vertical: 'middle' } } },
                 { header: 'Tổng Đăng Ký', key: 'dang_ky', width: 15, style: { alignment: { horizontal: 'center', vertical: 'middle' } } },
                 { header: 'Tổng Hoàn Thành', key: 'hoan_thanh', width: 15, style: { alignment: { horizontal: 'center', vertical: 'middle' } } },
                 { header: '% Thực Hiện/Đăng Ký', key: 'pct_dang_ky', width: 22, style: { numFormat: '0.0%', alignment: { horizontal: 'center', vertical: 'middle' } } },
@@ -2219,6 +2224,7 @@
                     mien: r.mien,
                     vung: r.vung,
                     so_gsbh: toNum(r.so_gsbh),
+                    target_mtd: toNum(r.target_mtd),
                     dang_ky: toNum(r.dang_ky),
                     hoan_thanh: toNum(r.hoan_thanh),
                     pct_dang_ky: toNum(r.pct_dang_ky),
@@ -2258,7 +2264,7 @@
                         cell.alignment = { vertical: 'middle', horizontal: 'center' };
                     }
 
-                    if (colNumber === 7 && !isTotal) {
+                    if (colNumber === 8 && !isTotal) {
                         const val = toNum(r.pct_target);
                         if (val !== null) {
                             let targetBg = 'FEE2E2';
@@ -2308,8 +2314,9 @@
                 { header: 'Vùng Bán Hàng', key: 'vung', width: 16 },
                 { header: 'Mã GSBH', key: 'ma_gsbh', width: 12, style: { alignment: { horizontal: 'center', vertical: 'middle' } } },
                 { header: 'Tên GSBH', key: 'ten_gsbh', width: 22 },
-                { header: 'Đăng Ký Tháng', key: 'dang_ky_thang', width: 15, style: { alignment: { horizontal: 'center', vertical: 'middle' } } },
-                { header: 'Hoàn Thành Tháng', key: 'hoan_thanh_thang', width: 18, style: { alignment: { horizontal: 'center', vertical: 'middle' } } },
+                { header: 'Target MTD', key: 'target_mtd', width: 15, style: { alignment: { horizontal: 'center', vertical: 'middle' } } },
+                { header: 'Đăng Ký', key: 'dang_ky_thang', width: 15, style: { alignment: { horizontal: 'center', vertical: 'middle' } } },
+                { header: 'Hoàn Thành', key: 'hoan_thanh_thang', width: 18, style: { alignment: { horizontal: 'center', vertical: 'middle' } } },
                 { header: '% Đăng Ký', key: 'pct_dang_ky', width: 14, style: { numFormat: '0%', alignment: { horizontal: 'center', vertical: 'middle' } } },
                 { header: '% Target', key: 'pct_target', width: 14, style: { numFormat: '0%', alignment: { horizontal: 'center', vertical: 'middle' } } },
                 { header: 'T1 ĐK', key: 'tuan1_dang_ky', width: 10, style: { alignment: { horizontal: 'center', vertical: 'middle' } } },
@@ -2354,6 +2361,7 @@
                     vung: r.vung,
                     ma_gsbh: r.ma_gsbh,
                     ten_gsbh: r.ten_gsbh,
+                    target_mtd: toNum(r.target_mtd),
                     dang_ky_thang: toNum(r.dang_ky_thang),
                     hoan_thanh_thang: toNum(r.hoan_thanh_thang),
                     pct_dang_ky: toNum(r.pct_dang_ky),
@@ -2396,7 +2404,7 @@
                         cell.font = { name: 'Arial', size: 9, bold: true, color: { argb: 'FF1E293B' } };
                     }
 
-                    if (colNumber === 8) {
+                    if (colNumber === 9) {
                         const val = toNum(r.pct_target);
                         if (val !== null) {
                             let targetBg = 'FEE2E2';
@@ -2417,7 +2425,7 @@
                         }
                     }
 
-                    if ([12, 16, 20, 24].includes(colNumber)) {
+                    if ([13, 17, 21, 25].includes(colNumber)) {
                         const val = cell.value;
                         if (val === 'Đạt') {
                             cell.fill = {
