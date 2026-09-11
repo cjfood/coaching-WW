@@ -1138,6 +1138,27 @@
     <main>
         <!-- ================= TAB: DASHBOARD ================= -->
         <div id="dashboard" class="tab-content active">
+            <!-- Dashboard Filters Area (Top Right) -->
+            <div style="display: flex; justify-content: flex-end; align-items: center; gap: 8px; margin-bottom: 20px; flex-wrap: wrap;">
+                <label style="font-size: 13px; font-weight: 600; color: var(--text-muted); white-space: nowrap;">Lọc Vùng:</label>
+                <select id="dashboard-zone-select" class="filter-control" style="min-width: 150px; padding: 8px 12px; font-size: 13px; height: 38px; border-radius: 6px; background-color: white;" onchange="updateDashboard()">
+                    <option value="Tất cả">Toàn Quốc (Tất cả)</option>
+                    <option value="Hà Nội">Hà Nội</option>
+                    <option value="Hải Phòng">Hải Phòng</option>
+                    <option value="Đà Nẵng">Đà Nẵng</option>
+                    <option value="Nha Trang">Nha Trang</option>
+                    <option value="HCM">HCM</option>
+                    <option value="Cần Thơ">Cần Thơ</option>
+                </select>
+                <label style="font-size: 13px; font-weight: 600; color: var(--text-muted); white-space: nowrap; margin-left: 12px;">Lọc Tuần:</label>
+                <select id="dashboard-week-select" class="filter-control" style="min-width: 140px; padding: 8px 12px; font-size: 13px; height: 38px; border-radius: 6px; background-color: white;" onchange="updateDashboard()">
+                    <option value="Lũy kế MTD">Lũy kế MTD</option>
+                    <option value="Tuần 1">Tuần 1</option>
+                    <option value="Tuần 2">Tuần 2</option>
+                    <option value="Tuần 3">Tuần 3</option>
+                    <option value="Tuần 4">Tuần 4</option>
+                </select>
+            </div>
             <!-- KPI Cards -->
             <div class="kpi-grid">
                 <div class="kpi-card">
@@ -1194,7 +1215,7 @@
                         <i class="fa-solid fa-chart-line"></i>
                     </div>
                 </div>
-                <div class="kpi-card">
+                <div class="kpi-card dashboard-month-only-kpi">
                     <div class="kpi-info">
                         <h3>Chỉ Tiêu (Target) Tháng</h3>
                         <div class="kpi-value" id="kpi-total-target">--</div>
@@ -1203,7 +1224,7 @@
                         <i class="fa-solid fa-bullseye"></i>
                     </div>
                 </div>
-                <div class="kpi-card">
+                <div class="kpi-card dashboard-month-only-kpi">
                     <div class="kpi-info">
                         <h3>Tỷ Lệ Thực Hiện/Target Tháng</h3>
                         <div class="kpi-value" id="kpi-target-completion-rate">--%</div>
@@ -1220,18 +1241,6 @@
                 <div class="chart-card">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
                         <h3 id="bar-chart-title" style="margin-bottom: 0;"><i class="fa-solid fa-chart-column"></i> Tỷ Lệ Thực Hiện / Target Theo Vùng (%)</h3>
-                        <div style="display: flex; align-items: center; gap: 8px;">
-                            <label style="font-size: 12px; font-weight: 600; color: var(--text-muted); white-space: nowrap;">Lọc Dashboard:</label>
-                            <select id="dashboard-zone-select" class="filter-control" style="min-width: 140px; padding: 6px 12px; font-size: 12px; height: auto;" onchange="selectDashboardZone(this.value)">
-                                <option value="Tất cả">Toàn Quốc (Tất cả)</option>
-                                <option value="Hà Nội">Hà Nội</option>
-                                <option value="Hải Phòng">Hải Phòng</option>
-                                <option value="Đà Nẵng">Đà Nẵng</option>
-                                <option value="Nha Trang">Nha Trang</option>
-                                <option value="HCM">HCM</option>
-                                <option value="Cần Thơ">Cần Thơ</option>
-                            </select>
-                        </div>
                     </div>
                     <div style="position: relative; height: 300px;">
                         <canvas id="bar-chart-vung"></canvas>
@@ -1318,11 +1327,21 @@
                                 <option value="Miền Nam">Miền Nam</option>
                             </select>
                         </div>
-                        <div class="filter-group">
+                        <div class="filter-group" style="min-width: 140px;">
                             <label>Vùng Bán Hàng</label>
                             <select class="filter-control" id="filter-vung" onchange="applyFilters()">
                                 <option value="">Tất cả các Vùng</option>
                                 <!-- JS dynamically loads zones based on selection -->
+                            </select>
+                        </div>
+                        <div class="filter-group" style="min-width: 130px;">
+                            <label>Xem Tuần</label>
+                            <select class="filter-control" id="filter-detail-tuan" onchange="applyFilters()">
+                                <option value="">Tất cả các tuần</option>
+                                <option value="Tuần 1">Chỉ xem Tuần 1</option>
+                                <option value="Tuần 2">Chỉ xem Tuần 2</option>
+                                <option value="Tuần 3">Chỉ xem Tuần 3</option>
+                                <option value="Tuần 4">Chỉ xem Tuần 4</option>
                             </select>
                         </div>
                         <div class="filter-group">
@@ -1400,6 +1419,16 @@
                             <label>Vùng Bán Hàng</label>
                             <select class="filter-control" id="filter-raw-vung" onchange="filterRawData()">
                                 <option value="">Tất cả các Vùng</option>
+                            </select>
+                        </div>
+                        <div class="filter-group" style="min-width: 120px;">
+                            <label>Tuần</label>
+                            <select class="filter-control" id="filter-raw-tuan" onchange="filterRawData()">
+                                <option value="">Tất cả các tuần</option>
+                                <option value="Tuần 1">Tuần 1</option>
+                                <option value="Tuần 2">Tuần 2</option>
+                                <option value="Tuần 3">Tuần 3</option>
+                                <option value="Tuần 4">Tuần 4</option>
                             </select>
                         </div>
                         <div class="filter-group" style="flex: 2; min-width: 250px;">
@@ -1528,6 +1557,19 @@
             if (document.getElementById('filter-raw-vung')) {
                 document.getElementById('filter-raw-vung').value = '';
             }
+            if (document.getElementById('filter-raw-tuan')) {
+                document.getElementById('filter-raw-tuan').value = '';
+            }
+            if (document.getElementById('filter-detail-tuan')) {
+                document.getElementById('filter-detail-tuan').value = '';
+            }
+            if (document.getElementById('dashboard-zone-select')) {
+                document.getElementById('dashboard-zone-select').value = 'Tất cả';
+                selectedDashboardZone = 'Tất cả';
+            }
+            if (document.getElementById('dashboard-week-select')) {
+                document.getElementById('dashboard-week-select').value = 'Lũy kế MTD';
+            }
 
             // Load filters list
             loadFilterOptions();
@@ -1632,34 +1674,73 @@
             const numGsbh = subset.length;
             document.getElementById('kpi-total-gs').innerText = numGsbh;
 
+            const weekVal = document.getElementById('dashboard-week-select') ? document.getElementById('dashboard-week-select').value : 'Lũy kế MTD';
+            const weekKeys = {
+                "Tuần 1": "tuan1",
+                "Tuần 2": "tuan2",
+                "Tuần 3": "tuan3",
+                "Tuần 4": "tuan4"
+            };
+
             let totalReg = 0;
             let totalComp = 0;
-            subset.forEach(gs => {
-                totalReg += gs.dang_ky_thang;
-                totalComp += gs.hoan_thanh_thang;
-            });
 
-            document.getElementById('kpi-total-reg').innerText = totalReg;
-            document.getElementById('kpi-total-comp').innerText = totalComp;
+            const targetMtdTitle = document.getElementById('kpi-target-mtd').previousElementSibling; 
+            const targetMtdRateTitle = document.getElementById('kpi-target-mtd-rate').previousElementSibling; 
 
-            const completionRate = totalReg > 0 ? (totalComp / totalReg * 100).toFixed(1) : 0;
-            document.getElementById('kpi-completion-rate').innerText = completionRate + "%";
+            if (weekVal === 'Lũy kế MTD') {
+                subset.forEach(gs => {
+                    totalReg += gs.dang_ky_thang;
+                    totalComp += gs.hoan_thanh_thang;
+                });
 
-            // 1. Target Tháng cố định: 16 ngày / GSBH
-            const totalTargetMonth = numGsbh * 16;
-            document.getElementById('kpi-total-target').innerText = totalTargetMonth + " ngày";
+                document.getElementById('kpi-total-reg').innerText = totalReg;
+                document.getElementById('kpi-total-comp').innerText = totalComp;
 
-            // Tỷ lệ thực hiện / Target Tháng
-            const targetMonthRate = totalTargetMonth > 0 ? (totalComp / totalTargetMonth * 100).toFixed(1) : 0;
-            document.getElementById('kpi-target-completion-rate').innerText = targetMonthRate + "%";
+                const completionRate = totalReg > 0 ? (totalComp / totalReg * 100).toFixed(1) : 0;
+                document.getElementById('kpi-completion-rate').innerText = completionRate + "%";
 
-            // 2. Target MTD: currentTargetDays ngày / GSBH (lấy từ biến toàn cục currentTargetDays đã được loadMonthData cập nhật)
-            const totalTargetMtd = numGsbh * currentTargetDays;
-            document.getElementById('kpi-target-mtd').innerText = totalTargetMtd + " ngày";
+                // Target MTD
+                const totalTargetMtd = numGsbh * currentTargetDays;
+                document.getElementById('kpi-target-mtd').innerText = totalTargetMtd + " ngày";
+                const targetMtdRate = totalTargetMtd > 0 ? (totalComp / totalTargetMtd * 100).toFixed(1) : 0;
+                document.getElementById('kpi-target-mtd-rate').innerText = targetMtdRate + "%";
 
-            // Tỷ lệ thực hiện / Target MTD
-            const targetMtdRate = totalTargetMtd > 0 ? (totalComp / totalTargetMtd * 100).toFixed(1) : 0;
-            document.getElementById('kpi-target-mtd-rate').innerText = targetMtdRate + "%";
+                // Show 2 thẻ cuối
+                document.querySelectorAll('.dashboard-month-only-kpi').forEach(el => el.style.display = '');
+                if (targetMtdTitle) targetMtdTitle.innerText = "Chỉ Tiêu (Target) MTD";
+                if (targetMtdRateTitle) targetMtdRateTitle.innerText = "Tỷ Lệ Thực Hiện/Target MTD";
+
+                // Target Tháng
+                const totalTargetMonth = numGsbh * 16;
+                document.getElementById('kpi-total-target').innerText = totalTargetMonth + " ngày";
+                const targetMonthRate = totalTargetMonth > 0 ? (totalComp / totalTargetMonth * 100).toFixed(1) : 0;
+                document.getElementById('kpi-target-completion-rate').innerText = targetMonthRate + "%";
+
+            } else {
+                const wkKey = weekKeys[weekVal];
+                subset.forEach(gs => {
+                    totalReg += gs[wkKey + '_dang_ky'] || 0;
+                    totalComp += gs[wkKey + '_hoan_thanh'] || 0;
+                });
+
+                document.getElementById('kpi-total-reg').innerText = totalReg;
+                document.getElementById('kpi-total-comp').innerText = totalComp;
+
+                const completionRate = totalReg > 0 ? (totalComp / totalReg * 100).toFixed(1) : 0;
+                document.getElementById('kpi-completion-rate').innerText = completionRate + "%";
+
+                // Target Tuần
+                const totalTargetWeek = numGsbh * 4;
+                document.getElementById('kpi-target-mtd').innerText = totalTargetWeek + " ngày";
+                const targetWeekRate = totalTargetWeek > 0 ? (totalComp / totalTargetWeek * 100).toFixed(1) : 0;
+                document.getElementById('kpi-target-mtd-rate').innerText = targetWeekRate + "%";
+
+                // Hide 2 thẻ cuối
+                document.querySelectorAll('.dashboard-month-only-kpi').forEach(el => el.style.display = 'none');
+                if (targetMtdTitle) targetMtdTitle.innerText = "Chỉ Tiêu Target " + weekVal;
+                if (targetMtdRateTitle) targetMtdRateTitle.innerText = "Tỷ Lệ Thực Hiện/Target " + weekVal;
+            }
         }
 
         // 2. Render Summary Table (Hierarchy)
@@ -1710,12 +1791,58 @@
         
         function renderCharts(subset = detailData) {
             // --- Bar Chart (Zones) ---
-            const zonesData = currentSummaryData.filter(r => !r.is_mien_total && !r.is_grand_total);
-            currentChartZonesData = zonesData; // Sync global variable
-            const barLabels = zonesData.map(r => r.vung);
+            const weekVal = document.getElementById('dashboard-week-select') ? document.getElementById('dashboard-week-select').value : 'Lũy kế MTD';
+            const weekKeys = {
+                "Tuần 1": "tuan1",
+                "Tuần 2": "tuan2",
+                "Tuần 3": "tuan3",
+                "Tuần 4": "tuan4"
+            };
+
+            const allZones = ["Hà Nội", "Hải Phòng", "Đà Nẵng", "Nha Trang", "HCM", "Cần Thơ"];
+            const barLabels = allZones;
             
-            // Map values: Completion vs Target percentage (Target = GSBH Count * 16)
-            const barTargetPctData = zonesData.map(r => (r.pct_target * 100).toFixed(1));
+            // Compute dynamically per zone and store in currentChartZonesData global variable
+            currentChartZonesData = allZones.map(zoneName => {
+                const subsetVung = detailData.filter(gs => gs.vung === zoneName);
+                const numGsbh = subsetVung.length;
+
+                let totalComp = 0;
+                let targetDays = 0;
+                if (weekVal === 'Lũy kế MTD') {
+                    subsetVung.forEach(gs => {
+                        totalComp += gs.hoan_thanh_thang;
+                    });
+                    targetDays = numGsbh * currentTargetDays;
+                } else {
+                    const wkKey = weekKeys[weekVal];
+                    subsetVung.forEach(gs => {
+                        totalComp += gs[wkKey + '_hoan_thanh'] || 0;
+                    });
+                    targetDays = numGsbh * 4.0;
+                }
+
+                return {
+                    vung: zoneName,
+                    hoan_thanh: totalComp,
+                    target: targetDays,
+                    so_gsbh: numGsbh
+                };
+            });
+
+            const barTargetPctData = currentChartZonesData.map(r => r.target > 0 ? (r.hoan_thanh / r.target * 100).toFixed(1) : 0);
+
+            // Update dynamic bar chart title
+            let titleText = '';
+            if (weekVal === 'Lũy kế MTD') {
+                titleText = `Tỷ Lệ Thực Hiện / Target Theo Vùng (Lũy kế ${currentTargetDays} ngày) (%)`;
+            } else {
+                titleText = `Tỷ Lệ Thực Hiện / Target Theo Vùng (${weekVal} - Target 4 ngày) (%)`;
+            }
+            const barTitleEl = document.getElementById('bar-chart-title');
+            if (barTitleEl) {
+                barTitleEl.innerHTML = `<i class="fa-solid fa-chart-column"></i> ${titleText}`;
+            }
             
             // Color mapping: Highlight active selected zone
             const backgroundColors = barLabels.map(z => {
@@ -1779,7 +1906,10 @@
                                         const zoneName = context.label;
                                         const pct = context.raw;
                                         const zoneRow = currentChartZonesData.find(r => r.vung === zoneName);
-                                        return ` Đạt Target: ${pct}% (${zoneRow.hoan_thanh}/${zoneRow.so_gsbh * currentTargetDays} ngày)`;
+                                        if (zoneRow) {
+                                            return ` Đạt Target: ${pct}% (${zoneRow.hoan_thanh}/${zoneRow.target} ngày)`;
+                                        }
+                                        return ` Đạt Target: ${pct}%`;
                                     }
                                 }
                             },
@@ -1789,9 +1919,8 @@
                                 formatter: (value, context) => {
                                     const zoneName = context.chart.data.labels[context.dataIndex];
                                     const zoneRow = currentChartZonesData.find(r => r.vung === zoneName);
-                                    if (zoneRow) {
-                                        const target = zoneRow.so_gsbh * currentTargetDays;
-                                        return `${value}%\n(${zoneRow.hoan_thanh}/${target})`;
+                                    if (zoneRow && zoneRow.target > 0) {
+                                        return `${value}%\n(${zoneRow.hoan_thanh}/${zoneRow.target})`;
                                     }
                                     return value + '%';
                                 },
@@ -1903,10 +2032,16 @@
             // Sync dropdown selection
             document.getElementById('dashboard-zone-select').value = zoneName;
             
-            // Filter GSBH subset for KPIs and Weekly Donut charts
+            // Trigger common update method
+            updateDashboard();
+        }
+
+        function updateDashboard() {
+            const zoneName = document.getElementById('dashboard-zone-select').value;
+            selectedDashboardZone = zoneName;
+
             const subset = zoneName === 'Tất cả' ? detailData : detailData.filter(gs => gs.vung === zoneName);
-            
-            // Render KPIs and Weekly Donuts for filtered subset
+
             renderKPIs(subset);
             renderCharts(subset);
         }
@@ -1949,6 +2084,43 @@
         function applyRawFilters() {
             loadRawFilterOptions();
             filterRawData();
+        }
+
+        function showHideDetailWeeks() {
+            const weekVal = document.getElementById('filter-detail-tuan').value;
+            const table = document.getElementById('detail-table');
+            if (!table) return;
+
+            // week columns index lists (0-indexed cells of rows)
+            const weekCols = {
+                "Tuần 1": [9, 10, 11, 12],
+                "Tuần 2": [13, 14, 15, 16],
+                "Tuần 3": [17, 18, 19, 20],
+                "Tuần 4": [21, 22, 23, 24]
+            };
+
+            const allCols = [9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24];
+
+            const rows = table.rows;
+            for (let r = 0; r < rows.length; r++) {
+                const cells = rows[r].cells;
+                
+                // Show all week columns first
+                allCols.forEach(idx => {
+                    if (cells[idx]) {
+                        cells[idx].style.display = '';
+                    }
+                });
+
+                // Hide irrelevant week columns if single week is selected
+                if (weekVal) {
+                    allCols.forEach(idx => {
+                        if (!weekCols[weekVal].includes(idx) && cells[idx]) {
+                            cells[idx].style.display = 'none';
+                        }
+                    });
+                }
+            }
         }
 
         function applyFilters() {
@@ -2028,6 +2200,8 @@
                 `;
                 tbody.appendChild(tr);
             });
+            // Apply Week visibility filter for detail table columns
+            showHideDetailWeeks();
         }
 
         // Sorting Logic
