@@ -1,0 +1,425 @@
+[
+  {
+    "Tên miền": "Miền Bắc",
+    "Tên Vùng": "Hà Nội",
+    "Area": "Hà Nội",
+    "Tên ASM": "Phạm Văn Việt",
+    "Office": "H.Noi 1",
+    "Mã GSBH": "CJ1410951",
+    "Tên GSBH": "Nguyễn Quang Sơn"
+  },
+  {
+    "Tên miền": "Miền Bắc",
+    "Tên Vùng": "Hà Nội",
+    "Area": "Hà Nội",
+    "Tên ASM": "Phạm Văn Việt",
+    "Office": "H.Noi 2",
+    "Mã GSBH": "08993",
+    "Tên GSBH": "Đàm Thị Thu Hằng"
+  },
+  {
+    "Tên miền": "Miền Bắc",
+    "Tên Vùng": "Hà Nội",
+    "Area": "Hà Nội",
+    "Tên ASM": "Phạm Văn Việt",
+    "Office": "H.Noi 3",
+    "Mã GSBH": "CJ1395521",
+    "Tên GSBH": "Nguyễn Đức Triệu"
+  },
+  {
+    "Tên miền": "Miền Bắc",
+    "Tên Vùng": "Hà Nội",
+    "Area": "Hà Nội",
+    "Tên ASM": "Phạm Văn Việt",
+    "Office": "H.Noi 4",
+    "Mã GSBH": "CJ1400200",
+    "Tên GSBH": "Nguyễn Khắc Dũng"
+  },
+  {
+    "Tên miền": "Miền Bắc",
+    "Tên Vùng": "Hà Nội",
+    "Area": "Hà Nội",
+    "Tên ASM": "Phạm Văn Việt",
+    "Office": "H.Noi 5",
+    "Mã GSBH": "CJ1330563",
+    "Tên GSBH": "Vũ Thị Huệ"
+  },
+  {
+    "Tên miền": "Miền Bắc",
+    "Tên Vùng": "Hà Nội",
+    "Area": "Hà Nội",
+    "Tên ASM": "Phạm Văn Việt",
+    "Office": "H.Noi 6",
+    "Mã GSBH": "CJ1405384",
+    "Tên GSBH": "Nguyễn Thị Phương Anh"
+  },
+  {
+    "Tên miền": "Miền Bắc",
+    "Tên Vùng": "Hà Nội",
+    "Area": "Tây Bắc",
+    "Tên ASM": "Vũ Tiến Luật",
+    "Office": "T. Nguyen",
+    "Mã GSBH": "O0858",
+    "Tên GSBH": "Vũ Thị Hoài"
+  },
+  {
+    "Tên miền": "Miền Bắc",
+    "Tên Vùng": "Hà Nội",
+    "Area": "Tây Bắc",
+    "Tên ASM": "Vũ Tiến Luật",
+    "Office": "P.Tho 1",
+    "Mã GSBH": "08980",
+    "Tên GSBH": "Bùi Hữu Sơn"
+  },
+  {
+    "Tên miền": "Miền Bắc",
+    "Tên Vùng": "Hà Nội",
+    "Area": "Tây Bắc",
+    "Tên ASM": "Vũ Tiến Luật",
+    "Office": "P.Tho 2",
+    "Mã GSBH": "CJ1411477",
+    "Tên GSBH": "Nguyễn Thúy Dương"
+  },
+  {
+    "Tên miền": "Miền Bắc",
+    "Tên Vùng": "Hà Nội",
+    "Area": "Tây Bắc",
+    "Tên ASM": "Vũ Tiến Luật",
+    "Office": "T.Quang",
+    "Mã GSBH": "CJ1405385",
+    "Tên GSBH": "Lê Thanh Trà"
+  },
+  {
+    "Tên miền": "Miền Bắc",
+    "Tên Vùng": "Hải Phòng",
+    "Area": "Hải Phòng",
+    "Tên ASM": "Trần Quang Trình",
+    "Office": "H.Phong 1",
+    "Mã GSBH": "CJ1405388",
+    "Tên GSBH": "Bùi Thị Luyến"
+  },
+  {
+    "Tên miền": "Miền Bắc",
+    "Tên Vùng": "Hải Phòng",
+    "Area": "Hải Phòng",
+    "Tên ASM": "Trần Quang Trình",
+    "Office": "H.Phong 2",
+    "Mã GSBH": "CJ1405387",
+    "Tên GSBH": "Nguyễn Thị Thùy Ninh"
+  },
+  {
+    "Tên miền": "Miền Bắc",
+    "Tên Vùng": "Hải Phòng",
+    "Area": "Hải Phòng",
+    "Tên ASM": "Trần Quang Trình",
+    "Office": "H.Phong 3",
+    "Mã GSBH": "CJ1399145",
+    "Tên GSBH": "Đỗ Văn Sáng"
+  },
+  {
+    "Tên miền": "Miền Bắc",
+    "Tên Vùng": "Hải Phòng",
+    "Area": "Hải Phòng",
+    "Tên ASM": "Trần Quang Trình",
+    "Office": "Q.Ninh ",
+    "Mã GSBH": "CJ1406004",
+    "Tên GSBH": "Nguyễn Văn Điều"
+  },
+  {
+    "Tên miền": "Miền Bắc",
+    "Tên Vùng": "Hải Phòng",
+    "Area": "Hải Phòng",
+    "Tên ASM": "Trần Quang Trình",
+    "Office": "B.Ninh 1",
+    "Mã GSBH": "O0828",
+    "Tên GSBH": "Trần Thị Linh Li"
+  },
+  {
+    "Tên miền": "Miền Bắc",
+    "Tên Vùng": "Hải Phòng",
+    "Area": "Hải Phòng",
+    "Tên ASM": "Trần Quang Trình",
+    "Office": "B.Ninh 2",
+    "Mã GSBH": "CJ1407773",
+    "Tên GSBH": "Nguyễn Phương Ngọc"
+  },
+  {
+    "Tên miền": "Miền Bắc",
+    "Tên Vùng": "Hải Phòng",
+    "Area": "DH & BMT",
+    "Tên ASM": "Trần Quang Trình",
+    "Office": "T.Hoa",
+    "Mã GSBH": "O0373",
+    "Tên GSBH": "Phạm Văn Thắng"
+  },
+  {
+    "Tên miền": "Miền Bắc",
+    "Tên Vùng": "Hải Phòng",
+    "Area": "DH & BMT",
+    "Tên ASM": "Trần Quang Trình",
+    "Office": "N.An",
+    "Mã GSBH": "CJ1414714",
+    "Tên GSBH": "Lê Văn Bảo"
+  },
+  {
+    "Tên miền": "Miền Bắc",
+    "Tên Vùng": "Hải Phòng",
+    "Area": "DH & BMT",
+    "Tên ASM": "Trần Quang Trình",
+    "Office": "H.Yen",
+    "Mã GSBH": "08562",
+    "Tên GSBH": "Nguyễn Văn Ngọc"
+  },
+  {
+    "Tên miền": "Miền Bắc",
+    "Tên Vùng": "Hải Phòng",
+    "Area": "DH & BMT",
+    "Tên ASM": "Trần Quang Trình",
+    "Office": "N.Binh 1",
+    "Mã GSBH": "07184",
+    "Tên GSBH": "Vũ Văn Khắc"
+  },
+  {
+    "Tên miền": "Miền Bắc",
+    "Tên Vùng": "Hải Phòng",
+    "Area": "DH & BMT",
+    "Tên ASM": "Trần Quang Trình",
+    "Office": "N.Binh 2",
+    "Mã GSBH": "CJ1415899",
+    "Tên GSBH": "Phạm Văn Sơn"
+  },
+  {
+    "Tên miền": "Miền Bắc",
+    "Tên Vùng": "Đà Nẵng",
+    "Area": "Đà Nẵng 2",
+    "Tên ASM": "Từ Trung Xuân",
+    "Office": "Hue",
+    "Mã GSBH": "O1053",
+    "Tên GSBH": "Trương Phước Cao"
+  },
+  {
+    "Tên miền": "Miền Bắc",
+    "Tên Vùng": "Đà Nẵng",
+    "Area": "Đà Nẵng 2",
+    "Tên ASM": "Từ Trung Xuân",
+    "Office": "Bình Định",
+    "Mã GSBH": "CJ1409980",
+    "Tên GSBH": "Lê Hoàng Y Ron"
+  },
+  {
+    "Tên miền": "Miền Bắc",
+    "Tên Vùng": "Đà Nẵng",
+    "Area": "Đà Nẵng 1",
+    "Tên ASM": "Nguyễn Văn Lúa",
+    "Office": "D.Nang",
+    "Mã GSBH": "05882_GS",
+    "Tên GSBH": "Nguyễn Văn Lúa"
+  },
+  {
+    "Tên miền": "Miền Bắc",
+    "Tên Vùng": "Đà Nẵng",
+    "Area": "Đà Nẵng 1",
+    "Tên ASM": "Nguyễn Văn Lúa",
+    "Office": "Q.Ngai",
+    "Mã GSBH": "CJ1405386",
+    "Tên GSBH": "Đặng Minh Thịnh"
+  },
+  {
+    "Tên miền": "Miền Nam",
+    "Tên Vùng": "Nha Trang",
+    "Area": "Nha Trang",
+    "Tên ASM": "Nguyễn Thanh Tùng",
+    "Office": "B.Thuan",
+    "Mã GSBH": "O1333",
+    "Tên GSBH": "Nguyễn Xuân Sáu"
+  },
+  {
+    "Tên miền": "Miền Nam",
+    "Tên Vùng": "Nha Trang",
+    "Area": "Nha Trang",
+    "Tên ASM": "Nguyễn Thanh Tùng",
+    "Office": "Dlak",
+    "Mã GSBH": "CJ1410032",
+    "Tên GSBH": "Lê Quốc Cường"
+  },
+  {
+    "Tên miền": "Miền Nam",
+    "Tên Vùng": "Nha Trang",
+    "Area": "Nha Trang",
+    "Tên ASM": "Nguyễn Thanh Tùng",
+    "Office": "L.Dong",
+    "Mã GSBH": "CJ1402825",
+    "Tên GSBH": "Trần Hoàng Chí"
+  },
+  {
+    "Tên miền": "Miền Nam",
+    "Tên Vùng": "Nha Trang",
+    "Area": "Nha Trang",
+    "Tên ASM": "Nguyễn Thanh Tùng",
+    "Office": "K.Hoa",
+    "Mã GSBH": "CJ1407776",
+    "Tên GSBH": "Lê Quang Tuyên"
+  },
+  {
+    "Tên miền": "Miền Nam",
+    "Tên Vùng": "Nha Trang",
+    "Area": "Nha Trang",
+    "Tên ASM": "Nguyễn Thanh Tùng",
+    "Office": "P.Yen",
+    "Mã GSBH": "CJ1414484",
+    "Tên GSBH": "Trần Văn Hội"
+  },
+  {
+    "Tên miền": "Miền Nam",
+    "Tên Vùng": "Nha Trang",
+    "Area": "Đông Nam Bộ",
+    "Tên ASM": "Đào Vĩnh Khánh",
+    "Office": "B. Duong",
+    "Mã GSBH": "CJ1410979",
+    "Tên GSBH": "Lê Đặng Bá Nhật"
+  },
+  {
+    "Tên miền": "Miền Nam",
+    "Tên Vùng": "Nha Trang",
+    "Area": "Đông Nam Bộ",
+    "Tên ASM": "Đào Vĩnh Khánh",
+    "Office": "Đ.Nai 1",
+    "Mã GSBH": "O1391",
+    "Tên GSBH": "Nguyễn Văn Hoàng"
+  },
+  {
+    "Tên miền": "Miền Nam",
+    "Tên Vùng": "Nha Trang",
+    "Area": "Đông Nam Bộ",
+    "Tên ASM": "Đào Vĩnh Khánh",
+    "Office": "Đ.Nai 2",
+    "Mã GSBH": "05319",
+    "Tên GSBH": "Nguyễn Doãn Nghĩa Hiển"
+  },
+  {
+    "Tên miền": "Miền Nam",
+    "Tên Vùng": "Nha Trang",
+    "Area": "Đông Nam Bộ",
+    "Tên ASM": "Đào Vĩnh Khánh",
+    "Office": "TÂY NINH",
+    "Mã GSBH": "CJ1407815",
+    "Tên GSBH": "Nguyễn Anh Sơn"
+  },
+  {
+    "Tên miền": "Miền Nam",
+    "Tên Vùng": "HCM",
+    "Area": "HCM",
+    "Tên ASM": "Chung Thành",
+    "Office": "BRVT",
+    "Mã GSBH": "07299",
+    "Tên GSBH": "Võ Văn Hoàng"
+  },
+  {
+    "Tên miền": "Miền Nam",
+    "Tên Vùng": "HCM",
+    "Area": "HCM",
+    "Tên ASM": "Chung Thành",
+    "Office": "HCM 1",
+    "Mã GSBH": "08240",
+    "Tên GSBH": "Hồ Ngọc Hải"
+  },
+  {
+    "Tên miền": "Miền Nam",
+    "Tên Vùng": "HCM",
+    "Area": "HCM",
+    "Tên ASM": "Chung Thành",
+    "Office": "HCM 2",
+    "Mã GSBH": "CJ1410311",
+    "Tên GSBH": "Nguyễn Huy Vũ"
+  },
+  {
+    "Tên miền": "Miền Nam",
+    "Tên Vùng": "HCM",
+    "Area": "HCM",
+    "Tên ASM": "Chung Thành",
+    "Office": "HCM 4",
+    "Mã GSBH": "CJ1410310",
+    "Tên GSBH": "Nguyễn Phước Hiền"
+  },
+  {
+    "Tên miền": "Miền Nam",
+    "Tên Vùng": "HCM",
+    "Area": "HCM",
+    "Tên ASM": "Chung Thành",
+    "Office": "HCM 5",
+    "Mã GSBH": "06739",
+    "Tên GSBH": "Nguyễn Khắc Lợi"
+  },
+  {
+    "Tên miền": "Miền Nam",
+    "Tên Vùng": "Cần Thơ",
+    "Area": "Tiền Giang",
+    "Tên ASM": "Nguyễn Hồ Ngọc Dũng",
+    "Office": "T.Giang",
+    "Mã GSBH": "CJ1405407",
+    "Tên GSBH": "Lê Thành Nam"
+  },
+  {
+    "Tên miền": "Miền Nam",
+    "Tên Vùng": "Cần Thơ",
+    "Area": "Tiền Giang",
+    "Tên ASM": "Nguyễn Hồ Ngọc Dũng",
+    "Office": "Long An",
+    "Mã GSBH": "CJ1412192",
+    "Tên GSBH": "Trần Thị Diêng"
+  },
+  {
+    "Tên miền": "Miền Nam",
+    "Tên Vùng": "Cần Thơ",
+    "Area": "Tiền Giang",
+    "Tên ASM": "Nguyễn Hồ Ngọc Dũng",
+    "Office": "V.Long",
+    "Mã GSBH": "CJ1404101",
+    "Tên GSBH": "Phạm Thành Nhân"
+  },
+  {
+    "Tên miền": "Miền Nam",
+    "Tên Vùng": "Cần Thơ",
+    "Area": "Tiền Giang",
+    "Tên ASM": "Nguyễn Hồ Ngọc Dũng",
+    "Office": "Ben Tre",
+    "Mã GSBH": "05992",
+    "Tên GSBH": "Nguyễn Hoài Phương"
+  },
+  {
+    "Tên miền": "Miền Nam",
+    "Tên Vùng": "Cần Thơ",
+    "Area": "Cần Thơ",
+    "Tên ASM": "Đoàn Thanh Bình",
+    "Office": "An Giang",
+    "Mã GSBH": "05806",
+    "Tên GSBH": "Tô Bá Vinh"
+  },
+  {
+    "Tên miền": "Miền Nam",
+    "Tên Vùng": "Cần Thơ",
+    "Area": "Cần Thơ",
+    "Tên ASM": "Đoàn Thanh Bình",
+    "Office": "C. Thơ",
+    "Mã GSBH": "O1093",
+    "Tên GSBH": "Nguyễn Hồng Đạt"
+  },
+  {
+    "Tên miền": "Miền Nam",
+    "Tên Vùng": "Cần Thơ",
+    "Area": "Cần Thơ",
+    "Tên ASM": "Đoàn Thanh Bình",
+    "Office": "C.Mau",
+    "Mã GSBH": "CJ1408585",
+    "Tên GSBH": "Lưu Minh Tâm"
+  },
+  {
+    "Tên miền": "Miền Nam",
+    "Tên Vùng": "HCM",
+    "Area": "HCM",
+    "Tên ASM": "Chung Thành",
+    "Office": "HCM 3",
+    "Mã GSBH": "CJ1416448",
+    "Tên GSBH": "Hà Minh Long"
+  }
+]
