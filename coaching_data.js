@@ -1,6 +1,6 @@
 // FILE TỰ ĐỘNG SINH - KHÔNG SỬA TRỰC TIẾP
 const coachingData = {
-  "lastUpdated": "19/10/2026 09:06:48",
+  "lastUpdated": "19/10/2026 09:07:42",
   "months": {
     "2026-07": {
       "currentTargetDays": 16.0,
