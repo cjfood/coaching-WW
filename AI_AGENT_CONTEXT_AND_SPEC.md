@@ -68,7 +68,8 @@
 ### 3.1. Mã hóa DRMONE của Tập đoàn CJ (`\x9b DRMONE`)
 * **Hiện tượng:** Tất cả file Excel (`.xlsx`, `.xlsb`) xuất từ hệ thống nội bộ CJ Foods đều bị bảo vệ bởi mã hóa bản quyền DRMONE. Header file chứa các byte `\x9b DRMONE`.
 * **Hậu quả nếu dùng pandas/openpyxl/pyxlsb:** Thư viện Python thuần túy sẽ báo lỗi `zipfile.BadZipFile: File is not a zip file`.
-* **Giải pháp chuẩn:** Bắt buộc phải đọc thông qua **Microsoft Excel COM Automation** (`win32com.client.Dispatch('Excel.Application')` hoặc Kingsoft WPS `ET.Application`). Excel của máy đã đăng nhập tài khoản doanh nghiệp CJ sẽ tự động giải mã file này.
+* **Giải pháp chuẩn:** Bắt buộc phải đọc thông qua **Microsoft Excel COM Automation** (`win32com.client.DispatchEx('Excel.Application')` hoặc Kingsoft WPS `ET.Application`). Excel của máy đã đăng nhập tài khoản doanh nghiệp CJ sẽ tự động giải mã file này.
+  * **Lưu ý đặc biệt quan trọng:** Luôn dùng `DispatchEx` thay vì `Dispatch` để tạo riêng một process Excel chạy ngầm độc lập (PID riêng). Tuyệt đối **không dùng lệnh `taskkill /im excel.exe`** để đảm bảo người dùng vẫn làm việc bình thường trên các file Excel cá nhân của họ mà không bị tắt hay mất dữ liệu.
 
 ### 3.2. Windows Mark-of-the-Web & Protected View
 * **Hiện tượng:** File người dùng tải về qua Zalo / Teams / Outlook bị Windows gắn luồng Alternate Data Stream `:Zone.Identifier`. Khi mở bằng COM, Excel rơi vào chế độ *Protected View* và báo lỗi `Open method of Workbooks class failed`.
@@ -76,8 +77,11 @@
   1. Trong script batch và Python, tự động gọi `Get-ChildItem -Recurse | Unblock-File` và `os.remove(p + ':Zone.Identifier')`.
   2. Bắt exception và kích hoạt `pv.Edit()` từ `excel.ProtectedViewWindows`.
 
-### 3.3. Xử lý treo tiến trình COM (COM Zombie Processes)
-* **Giải pháp:** Không khởi tạo/đóng Excel COM lặp đi lặp lại trong vòng lặp từng file. Thay vào đó, gom toàn bộ file cần đọc vào một instance Excel duy nhất (`excel_batch`), sau khi đọc xong toàn bộ mới gọi `excel_batch.Quit()`.
+### 3.3. Xử lý tiến trình chạy ngầm & Không can thiệp Excel người dùng (Isolated COM Execution)
+* **Giải pháp:** 
+  * Sử dụng `win32com.client.DispatchEx` để khởi tạo instance Excel hoàn toàn độc lập với PID riêng biệt.
+  * Mở file bằng `ReadOnly=True`, `Notify=False`, `DisplayAlerts=False` để không bao giờ xảy ra xung đột chia sẻ file ngay cả khi người dùng đang mở xem file đó.
+  * Lấy PID của instance nền (`GetWindowThreadProcessId`). Khi hoàn tất, gọi `excel_batch.Quit()`. Nếu có sự cố bất thường, chỉ dọn dẹp đúng PID nền đó (`taskkill /f /pid {batch_pid}`), tuyệt đối không tắt các cửa sổ Excel khác của người dùng.
 
 ### 3.4. Cơ chế Smart Cache (Tăng tốc độ từ 45s xuống 1s)
 * **Vấn đề:** Dữ liệu có nhiều tháng lịch sử (T7: 14.000 dòng, T8: 11.000 dòng, T9: 3.000 dòng...). Nếu mỗi lần cập nhật đều mở Excel COM đọc lại tất cả thì rất chậm và dễ xung đột.
