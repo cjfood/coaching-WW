@@ -157,7 +157,7 @@
 
         .tab-content {
             display: none;
-            margin-top: 25px;
+            margin-top: 0;
             animation: fadeIn 0.4s ease;
         }
 
@@ -1273,10 +1273,9 @@
     </div>
 
     <main>
-        <!-- ================= TAB: DASHBOARD ================= -->
-        <div id="dashboard" class="tab-content active">
-            <!-- Dashboard Filters Area (Top: Nút lọc tuần bên trái, Lọc vùng/tuần bên phải) -->
-            <div class="dashboard-filter-bar" style="display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 20px; flex-wrap: wrap;">
+        <!-- MASTER FILTER BAR (HIỂN THỊ VÀ ÁP DỤNG ĐỒNG BỘ CHO CẢ 3 TAB) -->
+        <div class="master-filter-card" style="background: white; border-radius: 12px; padding: 14px 20px; border: 1px solid var(--gray-border); box-shadow: var(--shadow); margin-top: 20px; margin-bottom: 20px;">
+            <div class="dashboard-filter-bar" style="display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap;">
                 <!-- Nhóm nút bấm lọc nhanh theo tuần -->
                 <div class="week-filter-container">
                     <span class="week-filter-label">
@@ -1309,7 +1308,7 @@
                 <!-- Bộ lọc Vùng và Dropdown Tuần bên phải (đồng bộ 2 chiều) -->
                 <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
                     <label style="font-size: 13px; font-weight: 600; color: var(--text-muted); white-space: nowrap;">Lọc Vùng:</label>
-                    <select id="dashboard-zone-select" class="filter-control" style="min-width: 150px; padding: 8px 12px; font-size: 13px; height: 38px; border-radius: 6px; background-color: white;" onchange="updateDashboard()">
+                    <select id="dashboard-zone-select" class="filter-control" style="min-width: 150px; padding: 8px 12px; font-size: 13px; height: 38px; border-radius: 6px; background-color: white;" onchange="onZoneSelectChange(this.value)">
                         <option value="Tất cả">Toàn Quốc (Tất cả)</option>
                         <option value="Hà Nội">Hà Nội</option>
                         <option value="Hải Phòng">Hải Phòng</option>
@@ -1328,6 +1327,10 @@
                     </select>
                 </div>
             </div>
+        </div>
+
+        <!-- ================= TAB: DASHBOARD ================= -->
+        <div id="dashboard" class="tab-content active">
             <!-- KPI Cards -->
             <div class="kpi-grid">
                 <div class="kpi-card">
@@ -1490,7 +1493,7 @@
                     <div style="display: flex; gap: 15px; flex-wrap: wrap; align-items: center; flex: 1;">
                         <div class="filter-group">
                             <label>Miền</label>
-                            <select class="filter-control" id="filter-mien" onchange="applyFilters()">
+                            <select class="filter-control" id="filter-mien" onchange="onDetailMienChange(this.value)">
                                 <option value="">Tất cả các Miền</option>
                                 <option value="Miền Bắc">Miền Bắc</option>
                                 <option value="Miền Nam">Miền Nam</option>
@@ -1498,14 +1501,14 @@
                         </div>
                         <div class="filter-group" style="min-width: 140px;">
                             <label>Vùng Bán Hàng</label>
-                            <select class="filter-control" id="filter-vung" onchange="applyFilters()">
+                            <select class="filter-control" id="filter-vung" onchange="onDetailVungChange(this.value)">
                                 <option value="">Tất cả các Vùng</option>
                                 <!-- JS dynamically loads zones based on selection -->
                             </select>
                         </div>
                         <div class="filter-group" style="min-width: 130px;">
                             <label>Xem Tuần</label>
-                            <select class="filter-control" id="filter-detail-tuan" onchange="applyFilters()">
+                            <select class="filter-control" id="filter-detail-tuan" onchange="onDetailTuanChange(this.value)">
                                 <option value="">Tất cả các tuần</option>
                                 <option value="Tuần 1">Chỉ xem Tuần 1</option>
                                 <option value="Tuần 2">Chỉ xem Tuần 2</option>
@@ -1536,7 +1539,7 @@
                                 <th class="sortable" onclick="sortTable('vung')">Vùng <i class="fa-solid fa-sort"></i></th>
                                 <th class="sortable" onclick="sortTable('ma_gsbh')">Mã GSBH <i class="fa-solid fa-sort"></i></th>
                                 <th class="sortable" onclick="sortTable('ten_gsbh')">Tên GSBH <i class="fa-solid fa-sort"></i></th>
-                                <th class="sortable text-center" onclick="sortTable('target_mtd')">Target MTD <i class="fa-solid fa-sort"></i></th>
+                                <th class="sortable text-center" id="detail-target-label" onclick="sortTable('target_mtd')">Target MTD <i class="fa-solid fa-sort"></i></th>
                                 <th class="sortable text-center" onclick="sortTable('dang_ky_thang')">Đăng Ký <i class="fa-solid fa-sort"></i></th>
                                 <th class="sortable text-center" onclick="sortTable('hoan_thanh_thang')">Hoàn Thành <i class="fa-solid fa-sort"></i></th>
                                 <th class="sortable text-center" onclick="sortTable('pct_dang_ky')">% Đăng Ký <i class="fa-solid fa-sort"></i></th>
@@ -1578,7 +1581,7 @@
                     <div style="display: flex; gap: 15px; flex-wrap: wrap; flex: 1; align-items: flex-end;">
                         <div class="filter-group" style="min-width: 140px;">
                             <label>Miền</label>
-                            <select class="filter-control" id="filter-raw-mien" onchange="applyRawFilters()">
+                            <select class="filter-control" id="filter-raw-mien" onchange="onRawMienChange(this.value)">
                                 <option value="">Tất cả các Miền</option>
                                 <option value="Miền Bắc">Miền Bắc</option>
                                 <option value="Miền Nam">Miền Nam</option>
@@ -1586,13 +1589,13 @@
                         </div>
                         <div class="filter-group" style="min-width: 160px;">
                             <label>Vùng Bán Hàng</label>
-                            <select class="filter-control" id="filter-raw-vung" onchange="filterRawData()">
+                            <select class="filter-control" id="filter-raw-vung" onchange="onRawVungChange(this.value)">
                                 <option value="">Tất cả các Vùng</option>
                             </select>
                         </div>
                         <div class="filter-group" style="min-width: 120px;">
                             <label>Tuần</label>
-                            <select class="filter-control" id="filter-raw-tuan" onchange="filterRawData()">
+                            <select class="filter-control" id="filter-raw-tuan" onchange="onRawTuanChange(this.value)">
                                 <option value="">Tất cả các tuần</option>
                                 <option value="Tuần 1">Tuần 1</option>
                                 <option value="Tuần 2">Tuần 2</option>
@@ -1736,6 +1739,12 @@
             if (document.getElementById('filter-detail-tuan')) {
                 document.getElementById('filter-detail-tuan').value = '';
             }
+            if (document.getElementById('filter-mien')) {
+                document.getElementById('filter-mien').value = '';
+            }
+            if (document.getElementById('filter-vung')) {
+                document.getElementById('filter-vung').value = '';
+            }
             if (document.getElementById('dashboard-zone-select')) {
                 document.getElementById('dashboard-zone-select').value = 'Tất cả';
                 selectedDashboardZone = 'Tất cả';
@@ -1759,14 +1768,8 @@
             document.getElementById('detail-target-header').innerHTML = '% Target (' + currentTargetDays + ' ngày) <i class="fa-solid fa-sort"></i>';
             document.getElementById('bar-chart-title').innerHTML = '<i class="fa-solid fa-chart-column"></i> Tỷ Lệ Thực Hiện / Target Theo Vùng (Lũy kế ' + currentTargetDays + ' ngày) (%)';
 
-            // Compute & Render everything
-            renderKPIs(detailData);
-            renderSummaryTable();
-            renderCharts(detailData);
-            renderDetailTable();
-            
-            rawCurrentPage = 1;
-            renderRawTable();
+            // Compute & Render everything across all 3 tabs
+            applyGlobalFilters();
 
             // Setup double scrolls
             setTimeout(() => {
@@ -2060,6 +2063,19 @@
                     tr.className = 'row-grand-total';
                 } else if (row.is_mien_total) {
                     tr.className = 'row-mien-total';
+                } else {
+                    tr.style.cursor = 'pointer';
+                    tr.title = `Nhấp để lọc theo Vùng: ${row.vung}`;
+                    if (selectedDashboardZone === row.vung) {
+                        tr.style.backgroundColor = 'rgba(197, 43, 39, 0.08)';
+                    }
+                    tr.onclick = () => {
+                        if (selectedDashboardZone === row.vung) {
+                            selectDashboardZone('Tất cả');
+                        } else {
+                            selectDashboardZone(row.vung);
+                        }
+                    };
                 }
 
                 // Check active week highlights for the 4 week columns
@@ -2348,10 +2364,11 @@
             selectedDashboardZone = zoneName;
             
             // Sync dropdown selection
-            document.getElementById('dashboard-zone-select').value = zoneName;
+            const dz = document.getElementById('dashboard-zone-select');
+            if (dz) dz.value = zoneName;
             
-            // Trigger common update method
-            updateDashboard();
+            // Trigger synchronized update across all tabs
+            applyGlobalFilters();
         }
 
         // Toggle multi-week mode
@@ -2374,7 +2391,7 @@
             }
 
             syncDashboardWeekUI();
-            updateDashboard();
+            applyGlobalFilters();
         }
 
         // Week selector callback from Toggle Buttons or Donut Charts
@@ -2418,7 +2435,7 @@
             }
 
             syncDashboardWeekUI();
-            updateDashboard();
+            applyGlobalFilters();
         }
 
         function syncDashboardWeekFromSelect(weekVal) {
@@ -2436,7 +2453,7 @@
                 currentSelectedWeeks = [weekVal];
             }
             syncDashboardWeekUI();
-            updateDashboard();
+            applyGlobalFilters();
         }
 
         function syncDashboardWeekUI() {
@@ -2487,7 +2504,8 @@
         }
 
         function updateDashboard() {
-            const zoneName = document.getElementById('dashboard-zone-select').value;
+            const zoneSelect = document.getElementById('dashboard-zone-select');
+            const zoneName = zoneSelect ? zoneSelect.value : (selectedDashboardZone || 'Tất cả');
             selectedDashboardZone = zoneName;
 
             const subset = zoneName === 'Tất cả' ? detailData : detailData.filter(gs => gs.vung === zoneName);
@@ -2497,11 +2515,187 @@
             renderSummaryTable();
         }
 
+        function onZoneSelectChange(zoneName) {
+            selectedDashboardZone = zoneName;
+            applyGlobalFilters();
+        }
+
+        let isSyncingFilters = false;
+
+        // UNIFIED MASTER FILTER FUNCTION: Synchronizes all 3 tabs
+        function applyGlobalFilters() {
+            if (isSyncingFilters) return;
+            isSyncingFilters = true;
+
+            try {
+                const isMtd = currentSelectedWeeks.includes('Lũy kế MTD') || currentSelectedWeeks.length === 0;
+
+                // 1. Update Tab 1 (Dashboard Tổng Quan)
+                updateDashboard();
+
+                // Determine matching Miền if a specific Zone is chosen
+                let targetMien = '';
+                if (selectedDashboardZone && selectedDashboardZone !== 'Tất cả') {
+                    const matchItem = detailData.find(gs => gs.vung === selectedDashboardZone) || 
+                                      rawData.find(r => r.vung === selectedDashboardZone);
+                    if (matchItem) {
+                        targetMien = matchItem.mien;
+                    }
+                }
+
+                // 2. Synchronize Tab 2 (Báo Cáo Chi Tiết GSBH)
+                const filterMien = document.getElementById('filter-mien');
+                if (filterMien) {
+                    filterMien.value = targetMien;
+                    loadFilterOptions();
+                }
+                const filterVung = document.getElementById('filter-vung');
+                if (filterVung) {
+                    filterVung.value = (selectedDashboardZone === 'Tất cả') ? '' : selectedDashboardZone;
+                }
+                const filterDetailTuan = document.getElementById('filter-detail-tuan');
+                if (filterDetailTuan) {
+                    if (!isMtd && currentSelectedWeeks.length === 1) {
+                        filterDetailTuan.value = currentSelectedWeeks[0];
+                    } else {
+                        filterDetailTuan.value = '';
+                    }
+                }
+                applyFilters();
+
+                // 3. Synchronize Tab 3 (Dữ Liệu Chi Tiết - Raw Data)
+                const filterRawMien = document.getElementById('filter-raw-mien');
+                if (filterRawMien) {
+                    filterRawMien.value = targetMien;
+                    loadRawFilterOptions();
+                }
+                const filterRawVung = document.getElementById('filter-raw-vung');
+                if (filterRawVung) {
+                    filterRawVung.value = (selectedDashboardZone === 'Tất cả') ? '' : selectedDashboardZone;
+                }
+                const filterRawTuan = document.getElementById('filter-raw-tuan');
+                if (filterRawTuan) {
+                    if (!isMtd && currentSelectedWeeks.length === 1) {
+                        filterRawTuan.value = currentSelectedWeeks[0];
+                    } else {
+                        filterRawTuan.value = '';
+                    }
+                }
+                filterRawData();
+            } finally {
+                isSyncingFilters = false;
+            }
+        }
+
+        // Two-way sync handlers for Tab 2 & Tab 3 inner filters
+        function onDetailMienChange(mienVal) {
+            loadFilterOptions();
+            if (selectedDashboardZone !== 'Tất cả') {
+                const matchZone = detailData.some(gs => gs.vung === selectedDashboardZone && (!mienVal || gs.mien === mienVal));
+                if (!matchZone) {
+                    selectedDashboardZone = 'Tất cả';
+                    const dz = document.getElementById('dashboard-zone-select');
+                    if (dz) dz.value = 'Tất cả';
+                }
+            }
+            applyFilters();
+            updateDashboard();
+
+            // Sync with Tab 3
+            const filterRawMien = document.getElementById('filter-raw-mien');
+            if (filterRawMien) {
+                filterRawMien.value = mienVal;
+                loadRawFilterOptions();
+                filterRawData();
+            }
+        }
+
+        function onDetailVungChange(vungVal) {
+            selectedDashboardZone = vungVal || 'Tất cả';
+            const dz = document.getElementById('dashboard-zone-select');
+            if (dz) dz.value = selectedDashboardZone;
+            applyGlobalFilters();
+        }
+
+        function onDetailTuanChange(tuanVal) {
+            if (tuanVal) {
+                currentSelectedWeeks = [tuanVal];
+            } else {
+                currentSelectedWeeks = ['Lũy kế MTD'];
+            }
+            syncDashboardWeekUI();
+            applyGlobalFilters();
+        }
+
+        function onRawMienChange(mienVal) {
+            loadRawFilterOptions();
+            if (selectedDashboardZone !== 'Tất cả') {
+                const matchZone = rawData.some(r => r.vung === selectedDashboardZone && (!mienVal || r.mien === mienVal));
+                if (!matchZone) {
+                    selectedDashboardZone = 'Tất cả';
+                    const dz = document.getElementById('dashboard-zone-select');
+                    if (dz) dz.value = 'Tất cả';
+                }
+            }
+            filterRawData();
+            updateDashboard();
+
+            // Sync with Tab 2
+            const filterMien = document.getElementById('filter-mien');
+            if (filterMien) {
+                filterMien.value = mienVal;
+                loadFilterOptions();
+                applyFilters();
+            }
+        }
+
+        function onRawVungChange(vungVal) {
+            selectedDashboardZone = vungVal || 'Tất cả';
+            const dz = document.getElementById('dashboard-zone-select');
+            if (dz) dz.value = selectedDashboardZone;
+            applyGlobalFilters();
+        }
+
+        function onRawTuanChange(tuanVal) {
+            if (tuanVal) {
+                currentSelectedWeeks = [tuanVal];
+            } else {
+                currentSelectedWeeks = ['Lũy kế MTD'];
+            }
+            syncDashboardWeekUI();
+            applyGlobalFilters();
+        }
+
         // 4. Filters Configuration for Detail Report
         function loadFilterOptions() {
+            const allZones = [...new Set(detailData.map(gs => gs.vung))].sort();
+
+            // Sync master zone dropdown options
+            const dashZoneSelect = document.getElementById('dashboard-zone-select');
+            if (dashZoneSelect) {
+                const curVal = selectedDashboardZone || 'Tất cả';
+                dashZoneSelect.innerHTML = '<option value="Tất cả">Toàn Quốc (Tất cả)</option>';
+                allZones.forEach(z => {
+                    const opt = document.createElement('option');
+                    opt.value = z;
+                    opt.innerText = z;
+                    dashZoneSelect.appendChild(opt);
+                });
+                dashZoneSelect.value = allZones.includes(curVal) ? curVal : 'Tất cả';
+            }
+
             const filterVung = document.getElementById('filter-vung');
-            const zones = [...new Set(detailData.map(gs => gs.vung))].sort();
+            if (!filterVung) return;
+            const mienVal = document.getElementById('filter-mien') ? document.getElementById('filter-mien').value : '';
             
+            let zones = [];
+            if (mienVal) {
+                zones = [...new Set(detailData.filter(gs => gs.mien === mienVal).map(gs => gs.vung))].sort();
+            } else {
+                zones = allZones;
+            }
+            
+            const currentVal = filterVung.value;
             filterVung.innerHTML = '<option value="">Tất cả các Vùng</option>';
             zones.forEach(z => {
                 const opt = document.createElement('option');
@@ -2509,12 +2703,15 @@
                 opt.innerText = z;
                 filterVung.appendChild(opt);
             });
+            if (zones.includes(currentVal)) {
+                filterVung.value = currentVal;
+            }
         }
 
         function loadRawFilterOptions() {
             const filterRawVung = document.getElementById('filter-raw-vung');
             if (!filterRawVung) return;
-            const mienVal = document.getElementById('filter-raw-mien').value;
+            const mienVal = document.getElementById('filter-raw-mien') ? document.getElementById('filter-raw-mien').value : '';
             
             let filteredZones = [];
             if (mienVal) {
@@ -2523,6 +2720,7 @@
                 filteredZones = [...new Set(rawData.map(r => r.vung))].sort();
             }
             
+            const currentVal = filterRawVung.value;
             filterRawVung.innerHTML = '<option value="">Tất cả các Vùng</option>';
             filteredZones.forEach(z => {
                 const opt = document.createElement('option');
@@ -2530,6 +2728,9 @@
                 opt.innerText = z;
                 filterRawVung.appendChild(opt);
             });
+            if (filteredZones.includes(currentVal)) {
+                filterRawVung.value = currentVal;
+            }
         }
 
         function applyRawFilters() {
@@ -2538,9 +2739,21 @@
         }
 
         function showHideDetailWeeks() {
-            const weekVal = document.getElementById('filter-detail-tuan').value;
             const table = document.getElementById('detail-table');
             if (!table) return;
+
+            const isMtd = currentSelectedWeeks.includes('Lũy kế MTD') || currentSelectedWeeks.length === 0;
+            const weekVal = document.getElementById('filter-detail-tuan') ? document.getElementById('filter-detail-tuan').value : '';
+
+            // determine which weeks should be visible
+            let visibleWeeks = [];
+            if (!isMtd) {
+                visibleWeeks = [...currentSelectedWeeks];
+            } else if (weekVal) {
+                visibleWeeks = [weekVal];
+            } else {
+                visibleWeeks = ["Tuần 1", "Tuần 2", "Tuần 3", "Tuần 4"];
+            }
 
             // week columns index lists (0-indexed cells of rows)
             const weekCols = {
@@ -2552,42 +2765,85 @@
 
             const allCols = [9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24];
 
+            // Which column indices should be visible?
+            const colsToShow = new Set();
+            visibleWeeks.forEach(w => {
+                if (weekCols[w]) {
+                    weekCols[w].forEach(idx => colsToShow.add(idx));
+                }
+            });
+
             const rows = table.rows;
             for (let r = 0; r < rows.length; r++) {
                 const cells = rows[r].cells;
-                
-                // Show all week columns first
                 allCols.forEach(idx => {
                     if (cells[idx]) {
-                        cells[idx].style.display = '';
+                        cells[idx].style.display = colsToShow.has(idx) ? '' : 'none';
                     }
                 });
-
-                // Hide irrelevant week columns if single week is selected
-                if (weekVal) {
-                    allCols.forEach(idx => {
-                        if (!weekCols[weekVal].includes(idx) && cells[idx]) {
-                            cells[idx].style.display = 'none';
-                        }
-                    });
-                }
             }
+
+            // Update top double scrollbar width
+            setTimeout(() => {
+                const wrapper = document.getElementById('detail-double-scroll');
+                const content = document.getElementById('detail-double-scroll-content');
+                const targetWrapper = document.getElementById('detail-table-wrapper');
+                if (wrapper && content && targetWrapper && table) {
+                    content.style.width = table.offsetWidth + 'px';
+                    wrapper.style.display = table.offsetWidth > targetWrapper.offsetWidth ? 'block' : 'none';
+                }
+            }, 20);
         }
 
         function applyFilters() {
-            const mienVal = document.getElementById('filter-mien').value;
-            const vungVal = document.getElementById('filter-vung').value;
-            const searchVal = document.getElementById('search-gs').value.toLowerCase().trim();
+            const mienVal = document.getElementById('filter-mien') ? document.getElementById('filter-mien').value : '';
+            const vungVal = document.getElementById('filter-vung') ? document.getElementById('filter-vung').value : '';
+            const searchVal = document.getElementById('search-gs') ? document.getElementById('search-gs').value.toLowerCase().trim() : '';
+
+            const isMtd = currentSelectedWeeks.includes('Lũy kế MTD') || currentSelectedWeeks.length === 0;
+            const weekKeys = {
+                "Tuần 1": "tuan1",
+                "Tuần 2": "tuan2",
+                "Tuần 3": "tuan3",
+                "Tuần 4": "tuan4"
+            };
 
             filteredDetailData = detailData.filter(gs => {
                 const matchMien = !mienVal || gs.mien === mienVal;
-                const matchVung = !vungVal || gs.vung === vungVal;
+                const activeZone = (selectedDashboardZone && selectedDashboardZone !== 'Tất cả') ? selectedDashboardZone : vungVal;
+                const matchVung = !activeZone || gs.vung === activeZone;
                 
-                // Normalizing vietnamese characters for search is good, but simple includes is enough
                 const searchString = `${gs.ma_gsbh} ${gs.ten_gsbh}`.toLowerCase();
                 const matchSearch = !searchVal || searchString.includes(searchVal);
 
                 return matchMien && matchVung && matchSearch;
+            });
+
+            // Calculate display dynamic values for selected weeks
+            filteredDetailData.forEach(row => {
+                if (isMtd) {
+                    row.display_target = row.target_mtd;
+                    row.display_dang_ky = row.dang_ky_thang;
+                    row.display_hoan_thanh = row.hoan_thanh_thang;
+                    row.display_pct_dang_ky = row.pct_dang_ky;
+                    row.display_pct_target = row.pct_target;
+                } else {
+                    const targetDays = currentSelectedWeeks.length * 4;
+                    let reg = 0;
+                    let comp = 0;
+                    currentSelectedWeeks.forEach(wk => {
+                        const k = weekKeys[wk];
+                        if (k) {
+                            reg += row[k + '_dang_ky'] || 0;
+                            comp += row[k + '_hoan_thanh'] || 0;
+                        }
+                    });
+                    row.display_target = targetDays;
+                    row.display_dang_ky = reg;
+                    row.display_hoan_thanh = comp;
+                    row.display_pct_dang_ky = reg > 0 ? (comp / reg) : 0;
+                    row.display_pct_target = targetDays > 0 ? (comp / targetDays) : 0;
+                }
             });
 
             // Sort and Render
@@ -2598,10 +2854,32 @@
         // 5. Render Detail Report Table
         function renderDetailTable() {
             const tbody = document.getElementById('detail-table-body');
+            if (!tbody) return;
             tbody.innerHTML = '';
+
+            const isMtd = currentSelectedWeeks.includes('Lũy kế MTD') || currentSelectedWeeks.length === 0;
+
+            // Update Target column header labels
+            const targetLabelEl = document.getElementById('detail-target-label');
+            const targetHeaderEl = document.getElementById('detail-target-header');
+            if (isMtd) {
+                if (targetLabelEl) targetLabelEl.innerHTML = `Target MTD <i class="fa-solid fa-sort"></i>`;
+                if (targetHeaderEl) targetHeaderEl.innerHTML = `% Target (${currentTargetDays} ngày) <i class="fa-solid fa-sort"></i>`;
+            } else {
+                const targetDays = currentSelectedWeeks.length * 4;
+                const weekLabel = currentSelectedWeeks.join(' + ');
+                if (targetLabelEl) targetLabelEl.innerHTML = `Target ${weekLabel} <i class="fa-solid fa-sort"></i>`;
+                if (targetHeaderEl) targetHeaderEl.innerHTML = `% Target (${targetDays} ngày) <i class="fa-solid fa-sort"></i>`;
+            }
 
             filteredDetailData.forEach(row => {
                 const tr = document.createElement('tr');
+                const targetVal = row.display_target !== undefined ? row.display_target : row.target_mtd;
+                const regVal = row.display_dang_ky !== undefined ? row.display_dang_ky : row.dang_ky_thang;
+                const compVal = row.display_hoan_thanh !== undefined ? row.display_hoan_thanh : row.hoan_thanh_thang;
+                const pctRegVal = row.display_pct_dang_ky !== undefined ? row.display_pct_dang_ky : row.pct_dang_ky;
+                const pctTargetVal = row.display_pct_target !== undefined ? row.display_pct_target : row.pct_target;
+
                 tr.innerHTML = `
                     <td>${row.mien}</td>
                     <td>${row.vung}</td>
@@ -2610,15 +2888,15 @@
                         <div class="gs-name">${row.ten_gsbh}</div>
                         <div class="gs-meta">${row.ma_gsbh} | ${row.mien} - ${row.vung}</div>
                     </td>
-                    <td class="text-center val-num">${row.target_mtd}</td>
-                    <td class="text-center val-num">${row.dang_ky_thang}</td>
-                    <td class="text-center val-num">${row.hoan_thanh_thang}</td>
-                    <td class="text-center val-pct">${(row.pct_dang_ky * 100).toFixed(0)}%</td>
+                    <td class="text-center val-num">${targetVal}</td>
+                    <td class="text-center val-num">${regVal}</td>
+                    <td class="text-center val-num">${compVal}</td>
+                    <td class="text-center val-pct">${(pctRegVal * 100).toFixed(0)}%</td>
                     <td class="text-center">
                         <div class="target-bar-bg" style="width: 50px;">
-                            <div class="target-bar-fill ${row.pct_target >= 1.0 ? 'high' : (row.pct_target >= 0.7 ? 'med' : 'low')}" style="width: ${Math.min(row.pct_target * 100, 100)}%;"></div>
+                            <div class="target-bar-fill ${pctTargetVal >= 1.0 ? 'high' : (pctTargetVal >= 0.7 ? 'med' : 'low')}" style="width: ${Math.min(pctTargetVal * 100, 100)}%;"></div>
                         </div>
-                        <span class="val-pct">${(row.pct_target * 100).toFixed(0)}%</span>
+                        <span class="val-pct">${(pctTargetVal * 100).toFixed(0)}%</span>
                     </td>
                     <!-- Tuần 1 -->
                     <td class="text-center val-num" style="border-left: 1px solid var(--gray-border);">${row.tuan1_dang_ky}</td>
@@ -2664,15 +2942,21 @@
                 currentSortOrder = 'asc';
             }
 
-            // Update sorting arrows inside column headers (optional enhancement)
             sortDetailData();
             renderDetailTable();
         }
 
         function sortDetailData() {
             filteredDetailData.sort((a, b) => {
-                let valA = a[currentSortCol];
-                let valB = b[currentSortCol];
+                let colKey = currentSortCol;
+                if (colKey === 'target_mtd') colKey = 'display_target';
+                else if (colKey === 'dang_ky_thang') colKey = 'display_dang_ky';
+                else if (colKey === 'hoan_thanh_thang') colKey = 'display_hoan_thanh';
+                else if (colKey === 'pct_dang_ky') colKey = 'display_pct_dang_ky';
+                else if (colKey === 'pct_target') colKey = 'display_pct_target';
+
+                let valA = a[colKey] !== undefined ? a[colKey] : a[currentSortCol];
+                let valB = b[colKey] !== undefined ? b[colKey] : b[currentSortCol];
 
                 // Lowercase string comparison
                 if (typeof valA === 'string') valA = valA.toLowerCase();
@@ -2686,16 +2970,26 @@
 
         // 6. Filter & Render Raw Data (Tab 3 with pagination)
         function filterRawData() {
-            const mienVal = document.getElementById('filter-raw-mien').value;
-            const vungVal = document.getElementById('filter-raw-vung').value;
+            const mienVal = document.getElementById('filter-raw-mien') ? document.getElementById('filter-raw-mien').value : '';
+            const vungVal = document.getElementById('filter-raw-vung') ? document.getElementById('filter-raw-vung').value : '';
             const tuanVal = document.getElementById('filter-raw-tuan') ? document.getElementById('filter-raw-tuan').value : '';
-            const query = document.getElementById('search-raw').value.toLowerCase().trim();
-            const dateVal = document.getElementById('filter-raw-date').value; // format: YYYY-MM-DD
+            const query = document.getElementById('search-raw') ? document.getElementById('search-raw').value.toLowerCase().trim() : '';
+            const dateVal = document.getElementById('filter-raw-date') ? document.getElementById('filter-raw-date').value : '';
             
+            const isMtd = currentSelectedWeeks.includes('Lũy kế MTD') || currentSelectedWeeks.length === 0;
+
             filteredRawData = rawData.filter(row => {
                 const matchMien = !mienVal || row.mien === mienVal;
-                const matchVung = !vungVal || row.vung === vungVal;
-                const matchTuan = !tuanVal || row.tuan === tuanVal;
+                const activeZone = (selectedDashboardZone && selectedDashboardZone !== 'Tất cả') ? selectedDashboardZone : vungVal;
+                const matchVung = !activeZone || row.vung === activeZone;
+                
+                let matchTuan = true;
+                if (!isMtd) {
+                    matchTuan = currentSelectedWeeks.includes(row.tuan);
+                } else if (tuanVal) {
+                    matchTuan = (row.tuan === tuanVal);
+                }
+
                 const matchDate = !dateVal || row.tu_ngay === dateVal;
                 
                 if (!matchMien || !matchVung || !matchTuan || !matchDate) return false;
@@ -2936,16 +3230,20 @@
 
             const toNum = (val) => (val !== undefined && val !== null && val !== '' && !isNaN(val)) ? Number(val) : null;
 
+            const isMtd = currentSelectedWeeks.includes('Lũy kế MTD') || currentSelectedWeeks.length === 0;
+            const targetHeader = isMtd ? 'Target MTD' : ('Target ' + currentSelectedWeeks.join(' + '));
+            const pctTargetHeader = isMtd ? ('% Target (' + currentTargetDays + ' ngày)') : ('% Target (' + (currentSelectedWeeks.length * 4) + ' ngày)');
+
             worksheet.columns = [
                 { header: 'Miền', key: 'mien', width: 12 },
                 { header: 'Vùng Bán Hàng', key: 'vung', width: 16 },
                 { header: 'Mã GSBH', key: 'ma_gsbh', width: 12, style: { alignment: { horizontal: 'center', vertical: 'middle' } } },
                 { header: 'Tên GSBH', key: 'ten_gsbh', width: 22 },
-                { header: 'Target MTD', key: 'target_mtd', width: 15, style: { alignment: { horizontal: 'center', vertical: 'middle' } } },
+                { header: targetHeader, key: 'target_mtd', width: 15, style: { alignment: { horizontal: 'center', vertical: 'middle' } } },
                 { header: 'Đăng Ký', key: 'dang_ky_thang', width: 15, style: { alignment: { horizontal: 'center', vertical: 'middle' } } },
                 { header: 'Hoàn Thành', key: 'hoan_thanh_thang', width: 18, style: { alignment: { horizontal: 'center', vertical: 'middle' } } },
                 { header: '% Đăng Ký', key: 'pct_dang_ky', width: 14, style: { numFormat: '0%', alignment: { horizontal: 'center', vertical: 'middle' } } },
-                { header: '% Target', key: 'pct_target', width: 14, style: { numFormat: '0%', alignment: { horizontal: 'center', vertical: 'middle' } } },
+                { header: pctTargetHeader, key: 'pct_target', width: 16, style: { numFormat: '0%', alignment: { horizontal: 'center', vertical: 'middle' } } },
                 { header: 'T1 ĐK', key: 'tuan1_dang_ky', width: 10, style: { alignment: { horizontal: 'center', vertical: 'middle' } } },
                 { header: 'T1 HT', key: 'tuan1_hoan_thanh', width: 10, style: { alignment: { horizontal: 'center', vertical: 'middle' } } },
                 { header: 'T1 % Target', key: 'tuan1_pct_target', width: 14, style: { numFormat: '0%', alignment: { horizontal: 'center', vertical: 'middle' } } },
@@ -2983,16 +3281,22 @@
 
             // Data Rows
             filteredDetailData.forEach((r) => {
+                const targetVal = r.display_target !== undefined ? r.display_target : r.target_mtd;
+                const regVal = r.display_dang_ky !== undefined ? r.display_dang_ky : r.dang_ky_thang;
+                const compVal = r.display_hoan_thanh !== undefined ? r.display_hoan_thanh : r.hoan_thanh_thang;
+                const pctRegVal = r.display_pct_dang_ky !== undefined ? r.display_pct_dang_ky : r.pct_dang_ky;
+                const pctTargetVal = r.display_pct_target !== undefined ? r.display_pct_target : r.pct_target;
+
                 const row = worksheet.addRow({
                     mien: r.mien,
                     vung: r.vung,
                     ma_gsbh: r.ma_gsbh,
                     ten_gsbh: r.ten_gsbh,
-                    target_mtd: toNum(r.target_mtd),
-                    dang_ky_thang: toNum(r.dang_ky_thang),
-                    hoan_thanh_thang: toNum(r.hoan_thanh_thang),
-                    pct_dang_ky: toNum(r.pct_dang_ky),
-                    pct_target: toNum(r.pct_target),
+                    target_mtd: toNum(targetVal),
+                    dang_ky_thang: toNum(regVal),
+                    hoan_thanh_thang: toNum(compVal),
+                    pct_dang_ky: toNum(pctRegVal),
+                    pct_target: toNum(pctTargetVal),
                     tuan1_dang_ky: toNum(r.tuan1_dang_ky),
                     tuan1_hoan_thanh: toNum(r.tuan1_hoan_thanh),
                     tuan1_pct_target: toNum(r.tuan1_pct_target),
@@ -3032,7 +3336,7 @@
                     }
 
                     if (colNumber === 9) {
-                        const val = toNum(r.pct_target);
+                        const val = toNum(cell.value);
                         if (val !== null) {
                             let targetBg = 'FEE2E2';
                             let targetText = '991B1B';
