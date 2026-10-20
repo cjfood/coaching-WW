@@ -274,6 +274,22 @@
             border-radius: 8px;
             background-color: var(--gray-light);
             border: 1px dashed var(--gray-border);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .donut-item:hover {
+            transform: translateY(-2px);
+            border-color: var(--primary);
+            background-color: #FFF5F5;
+            box-shadow: var(--shadow);
+        }
+
+        .donut-item.active {
+            border-color: var(--primary);
+            border-style: solid;
+            background-color: var(--primary-light);
+            box-shadow: 0 0 0 2px rgba(197, 43, 39, 0.25);
         }
 
         .donut-item h4 {
@@ -283,11 +299,72 @@
             margin-bottom: 8px;
         }
 
+        .donut-item.active h4 {
+            color: var(--primary);
+            font-weight: 700;
+        }
+
         .donut-chart-container {
             position: relative;
             height: 120px;
             display: flex;
             justify-content: center;
+        }
+
+        /* Week Filter Buttons */
+        .week-filter-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .week-filter-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-muted);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            user-select: none;
+        }
+
+        .week-btn-group {
+            display: inline-flex;
+            background: #F1F5F9;
+            padding: 4px;
+            border-radius: 8px;
+            border: 1px solid var(--gray-border);
+            gap: 4px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+        }
+
+        .btn-week-toggle {
+            border: none;
+            background: transparent;
+            color: var(--text-muted);
+            font-size: 13px;
+            font-weight: 600;
+            padding: 7px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
+            user-select: none;
+        }
+
+        .btn-week-toggle:hover {
+            color: var(--primary);
+            background: rgba(197, 43, 39, 0.08);
+        }
+
+        .btn-week-toggle.active {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 2px 6px rgba(197, 43, 39, 0.3);
         }
 
         /* Table Card */
@@ -902,6 +979,29 @@
                 gap: 8px;
             }
 
+            .dashboard-filter-bar {
+                flex-direction: column;
+                align-items: stretch !important;
+                gap: 12px !important;
+            }
+
+            .week-filter-container {
+                width: 100%;
+            }
+
+            .week-btn-group {
+                width: 100%;
+                display: flex;
+                overflow-x: auto;
+            }
+
+            .btn-week-toggle {
+                flex: 1;
+                justify-content: center;
+                padding: 6px 10px;
+                font-size: 12px;
+            }
+
             .donut-item {
                 padding: 6px;
             }
@@ -1138,26 +1238,53 @@
     <main>
         <!-- ================= TAB: DASHBOARD ================= -->
         <div id="dashboard" class="tab-content active">
-            <!-- Dashboard Filters Area (Top Right) -->
-            <div style="display: flex; justify-content: flex-end; align-items: center; gap: 8px; margin-bottom: 20px; flex-wrap: wrap;">
-                <label style="font-size: 13px; font-weight: 600; color: var(--text-muted); white-space: nowrap;">Lọc Vùng:</label>
-                <select id="dashboard-zone-select" class="filter-control" style="min-width: 150px; padding: 8px 12px; font-size: 13px; height: 38px; border-radius: 6px; background-color: white;" onchange="updateDashboard()">
-                    <option value="Tất cả">Toàn Quốc (Tất cả)</option>
-                    <option value="Hà Nội">Hà Nội</option>
-                    <option value="Hải Phòng">Hải Phòng</option>
-                    <option value="Đà Nẵng">Đà Nẵng</option>
-                    <option value="Nha Trang">Nha Trang</option>
-                    <option value="HCM">HCM</option>
-                    <option value="Cần Thơ">Cần Thơ</option>
-                </select>
-                <label style="font-size: 13px; font-weight: 600; color: var(--text-muted); white-space: nowrap; margin-left: 12px;">Lọc Tuần:</label>
-                <select id="dashboard-week-select" class="filter-control" style="min-width: 140px; padding: 8px 12px; font-size: 13px; height: 38px; border-radius: 6px; background-color: white;" onchange="updateDashboard()">
-                    <option value="Lũy kế MTD">Lũy kế MTD</option>
-                    <option value="Tuần 1">Tuần 1</option>
-                    <option value="Tuần 2">Tuần 2</option>
-                    <option value="Tuần 3">Tuần 3</option>
-                    <option value="Tuần 4">Tuần 4</option>
-                </select>
+            <!-- Dashboard Filters Area (Top: Nút lọc tuần bên trái, Lọc vùng/tuần bên phải) -->
+            <div class="dashboard-filter-bar" style="display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 20px; flex-wrap: wrap;">
+                <!-- Nhóm nút bấm lọc nhanh theo tuần -->
+                <div class="week-filter-container">
+                    <span class="week-filter-label">
+                        <i class="fa-solid fa-calendar-week" style="color: var(--primary);"></i> Lọc Tuần:
+                    </span>
+                    <div class="week-btn-group" role="group" aria-label="Bộ lọc theo tuần">
+                        <button type="button" class="btn-week-toggle active" data-week="Lũy kế MTD" onclick="setDashboardWeek('Lũy kế MTD')">
+                            <i class="fa-solid fa-chart-pie" style="font-size: 11px;"></i> Lũy kế MTD
+                        </button>
+                        <button type="button" class="btn-week-toggle" data-week="Tuần 1" onclick="setDashboardWeek('Tuần 1')">
+                            Tuần 1
+                        </button>
+                        <button type="button" class="btn-week-toggle" data-week="Tuần 2" onclick="setDashboardWeek('Tuần 2')">
+                            Tuần 2
+                        </button>
+                        <button type="button" class="btn-week-toggle" data-week="Tuần 3" onclick="setDashboardWeek('Tuần 3')">
+                            Tuần 3
+                        </button>
+                        <button type="button" class="btn-week-toggle" data-week="Tuần 4" onclick="setDashboardWeek('Tuần 4')">
+                            Tuần 4
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Bộ lọc Vùng và Dropdown Tuần bên phải (đồng bộ 2 chiều) -->
+                <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                    <label style="font-size: 13px; font-weight: 600; color: var(--text-muted); white-space: nowrap;">Lọc Vùng:</label>
+                    <select id="dashboard-zone-select" class="filter-control" style="min-width: 150px; padding: 8px 12px; font-size: 13px; height: 38px; border-radius: 6px; background-color: white;" onchange="updateDashboard()">
+                        <option value="Tất cả">Toàn Quốc (Tất cả)</option>
+                        <option value="Hà Nội">Hà Nội</option>
+                        <option value="Hải Phòng">Hải Phòng</option>
+                        <option value="Đà Nẵng">Đà Nẵng</option>
+                        <option value="Nha Trang">Nha Trang</option>
+                        <option value="HCM">HCM</option>
+                        <option value="Cần Thơ">Cần Thơ</option>
+                    </select>
+                    <label style="font-size: 13px; font-weight: 600; color: var(--text-muted); white-space: nowrap; margin-left: 8px;">Lọc Tuần:</label>
+                    <select id="dashboard-week-select" class="filter-control" style="min-width: 140px; padding: 8px 12px; font-size: 13px; height: 38px; border-radius: 6px; background-color: white;" onchange="syncDashboardWeekFromSelect(this.value)">
+                        <option value="Lũy kế MTD">Lũy kế MTD</option>
+                        <option value="Tuần 1">Tuần 1</option>
+                        <option value="Tuần 2">Tuần 2</option>
+                        <option value="Tuần 3">Tuần 3</option>
+                        <option value="Tuần 4">Tuần 4</option>
+                    </select>
+                </div>
             </div>
             <!-- KPI Cards -->
             <div class="kpi-grid">
@@ -1250,25 +1377,25 @@
                 <div class="chart-card">
                     <h3><i class="fa-solid fa-percent"></i> Tỷ Lệ GSBH Đạt KPI Tuần (>=4 ngày)</h3>
                     <div class="donut-grid">
-                        <div class="donut-item">
+                        <div class="donut-item" data-week="Tuần 1" onclick="setDashboardWeek('Tuần 1')" title="Nhấp để xem số liệu Tuần 1">
                             <h4>Tuần 1</h4>
                             <div class="donut-chart-container">
                                 <canvas id="donut-tuan1"></canvas>
                             </div>
                         </div>
-                        <div class="donut-item">
+                        <div class="donut-item" data-week="Tuần 2" onclick="setDashboardWeek('Tuần 2')" title="Nhấp để xem số liệu Tuần 2">
                             <h4>Tuần 2</h4>
                             <div class="donut-chart-container">
                                 <canvas id="donut-tuan2"></canvas>
                             </div>
                         </div>
-                        <div class="donut-item">
+                        <div class="donut-item" data-week="Tuần 3" onclick="setDashboardWeek('Tuần 3')" title="Nhấp để xem số liệu Tuần 3">
                             <h4>Tuần 3</h4>
                             <div class="donut-chart-container">
                                 <canvas id="donut-tuan3"></canvas>
                             </div>
                         </div>
-                        <div class="donut-item">
+                        <div class="donut-item" data-week="Tuần 4" onclick="setDashboardWeek('Tuần 4')" title="Nhấp để xem số liệu Tuần 4">
                             <h4>Tuần 4</h4>
                             <div class="donut-chart-container">
                                 <canvas id="donut-tuan4"></canvas>
@@ -1572,6 +1699,7 @@
             if (document.getElementById('dashboard-week-select')) {
                 document.getElementById('dashboard-week-select').value = 'Lũy kế MTD';
             }
+            syncDashboardWeekUI('Lũy kế MTD');
 
             // Load filters list
             loadFilterOptions();
@@ -2036,6 +2164,46 @@
             
             // Trigger common update method
             updateDashboard();
+        }
+
+        // Week selector callback from Toggle Buttons or Donut Charts
+        function setDashboardWeek(weekVal) {
+            const select = document.getElementById('dashboard-week-select');
+            const currentVal = select ? select.value : 'Lũy kế MTD';
+            // Toggle behavior: clicking active specific week toggles back to 'Lũy kế MTD'
+            let targetVal = weekVal;
+            if (weekVal !== 'Lũy kế MTD' && currentVal === weekVal) {
+                targetVal = 'Lũy kế MTD';
+            }
+            if (select) {
+                select.value = targetVal;
+            }
+            syncDashboardWeekUI(targetVal);
+            updateDashboard();
+        }
+
+        function syncDashboardWeekFromSelect(weekVal) {
+            syncDashboardWeekUI(weekVal);
+            updateDashboard();
+        }
+
+        function syncDashboardWeekUI(weekVal) {
+            // Update week toggle buttons
+            document.querySelectorAll('.btn-week-toggle').forEach(btn => {
+                if (btn.getAttribute('data-week') === weekVal) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+            // Update donut items highlight
+            document.querySelectorAll('.donut-item').forEach(item => {
+                if (item.getAttribute('data-week') === weekVal) {
+                    item.classList.add('active');
+                } else {
+                    item.classList.remove('active');
+                }
+            });
         }
 
         function updateDashboard() {
