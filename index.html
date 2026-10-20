@@ -367,6 +367,43 @@
             box-shadow: 0 2px 6px rgba(197, 43, 39, 0.3);
         }
 
+        .multi-week-checkbox-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-dark);
+            cursor: pointer;
+            user-select: none;
+            background: white;
+            padding: 7px 13px;
+            border-radius: 8px;
+            border: 1px solid var(--gray-border);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+            transition: var(--transition);
+        }
+
+        .multi-week-checkbox-label:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: #FFF5F5;
+        }
+
+        .multi-week-checkbox-label input[type="checkbox"] {
+            accent-color: var(--primary);
+            cursor: pointer;
+            width: 15px;
+            height: 15px;
+        }
+
+        .multi-week-checkbox-label.active {
+            border-color: var(--primary);
+            background: var(--primary-light);
+            color: var(--primary);
+            box-shadow: 0 2px 4px rgba(197, 43, 39, 0.15);
+        }
+
         /* Table Card */
         .table-card {
             background-color: white;
@@ -1246,22 +1283,27 @@
                         <i class="fa-solid fa-calendar-week" style="color: var(--primary);"></i> Lọc Tuần:
                     </span>
                     <div class="week-btn-group" role="group" aria-label="Bộ lọc theo tuần">
-                        <button type="button" class="btn-week-toggle active" data-week="Lũy kế MTD" onclick="setDashboardWeek('Lũy kế MTD')">
+                        <button type="button" class="btn-week-toggle active" data-week="Lũy kế MTD" onclick="setDashboardWeek('Lũy kế MTD', event)">
                             <i class="fa-solid fa-chart-pie" style="font-size: 11px;"></i> Lũy kế MTD
                         </button>
-                        <button type="button" class="btn-week-toggle" data-week="Tuần 1" onclick="setDashboardWeek('Tuần 1')">
+                        <button type="button" class="btn-week-toggle" data-week="Tuần 1" onclick="setDashboardWeek('Tuần 1', event)">
                             Tuần 1
                         </button>
-                        <button type="button" class="btn-week-toggle" data-week="Tuần 2" onclick="setDashboardWeek('Tuần 2')">
+                        <button type="button" class="btn-week-toggle" data-week="Tuần 2" onclick="setDashboardWeek('Tuần 2', event)">
                             Tuần 2
                         </button>
-                        <button type="button" class="btn-week-toggle" data-week="Tuần 3" onclick="setDashboardWeek('Tuần 3')">
+                        <button type="button" class="btn-week-toggle" data-week="Tuần 3" onclick="setDashboardWeek('Tuần 3', event)">
                             Tuần 3
                         </button>
-                        <button type="button" class="btn-week-toggle" data-week="Tuần 4" onclick="setDashboardWeek('Tuần 4')">
+                        <button type="button" class="btn-week-toggle" data-week="Tuần 4" onclick="setDashboardWeek('Tuần 4', event)">
                             Tuần 4
                         </button>
                     </div>
+                    <!-- Nút bật/tắt chế độ chọn nhiều tuần -->
+                    <label class="multi-week-checkbox-label" title="Bật để có thể chọn đồng thời nhiều tuần (ví dụ: Tuần 1 + Tuần 2)">
+                        <input type="checkbox" id="multi-week-checkbox" onchange="toggleMultiWeekMode(this.checked)">
+                        <span><i class="fa-solid fa-layer-group" style="color: var(--primary);"></i> Chọn nhiều tuần</span>
+                    </label>
                 </div>
 
                 <!-- Bộ lọc Vùng và Dropdown Tuần bên phải (đồng bộ 2 chiều) -->
@@ -1377,25 +1419,25 @@
                 <div class="chart-card">
                     <h3><i class="fa-solid fa-percent"></i> Tỷ Lệ GSBH Đạt KPI Tuần (>=4 ngày)</h3>
                     <div class="donut-grid">
-                        <div class="donut-item" data-week="Tuần 1" onclick="setDashboardWeek('Tuần 1')" title="Nhấp để xem số liệu Tuần 1">
+                        <div class="donut-item" data-week="Tuần 1" onclick="setDashboardWeek('Tuần 1', event)" title="Nhấp để xem số liệu Tuần 1">
                             <h4>Tuần 1</h4>
                             <div class="donut-chart-container">
                                 <canvas id="donut-tuan1"></canvas>
                             </div>
                         </div>
-                        <div class="donut-item" data-week="Tuần 2" onclick="setDashboardWeek('Tuần 2')" title="Nhấp để xem số liệu Tuần 2">
+                        <div class="donut-item" data-week="Tuần 2" onclick="setDashboardWeek('Tuần 2', event)" title="Nhấp để xem số liệu Tuần 2">
                             <h4>Tuần 2</h4>
                             <div class="donut-chart-container">
                                 <canvas id="donut-tuan2"></canvas>
                             </div>
                         </div>
-                        <div class="donut-item" data-week="Tuần 3" onclick="setDashboardWeek('Tuần 3')" title="Nhấp để xem số liệu Tuần 3">
+                        <div class="donut-item" data-week="Tuần 3" onclick="setDashboardWeek('Tuần 3', event)" title="Nhấp để xem số liệu Tuần 3">
                             <h4>Tuần 3</h4>
                             <div class="donut-chart-container">
                                 <canvas id="donut-tuan3"></canvas>
                             </div>
                         </div>
-                        <div class="donut-item" data-week="Tuần 4" onclick="setDashboardWeek('Tuần 4')" title="Nhấp để xem số liệu Tuần 4">
+                        <div class="donut-item" data-week="Tuần 4" onclick="setDashboardWeek('Tuần 4', event)" title="Nhấp để xem số liệu Tuần 4">
                             <h4>Tuần 4</h4>
                             <div class="donut-chart-container">
                                 <canvas id="donut-tuan4"></canvas>
@@ -1627,6 +1669,8 @@
         let currentTargetDays = 16; // Dynamic target
         let currentSummaryData = []; // Dynamic summary data per month
         let currentChartZonesData = []; // To avoid JS closure bug in chart update callbacks
+        let isMultiWeekMode = false; // Multi-week selection mode
+        let currentSelectedWeeks = ['Lũy kế MTD']; // Active selected weeks (array)
         
         // Raw Data Pagination variables
         let rawPageSize = 15;
@@ -1699,7 +1743,12 @@
             if (document.getElementById('dashboard-week-select')) {
                 document.getElementById('dashboard-week-select').value = 'Lũy kế MTD';
             }
-            syncDashboardWeekUI('Lũy kế MTD');
+            isMultiWeekMode = false;
+            currentSelectedWeeks = ['Lũy kế MTD'];
+            const multiCb = document.getElementById('multi-week-checkbox');
+            if (multiCb) multiCb.checked = false;
+            document.querySelector('.multi-week-checkbox-label')?.classList.remove('active');
+            syncDashboardWeekUI();
 
             // Load filters list
             loadFilterOptions();
@@ -1804,7 +1853,7 @@
             const numGsbh = subset.length;
             document.getElementById('kpi-total-gs').innerText = numGsbh;
 
-            const weekVal = document.getElementById('dashboard-week-select') ? document.getElementById('dashboard-week-select').value : 'Lũy kế MTD';
+            const isMtd = currentSelectedWeeks.includes('Lũy kế MTD') || currentSelectedWeeks.length === 0;
             const weekKeys = {
                 "Tuần 1": "tuan1",
                 "Tuần 2": "tuan2",
@@ -1818,7 +1867,7 @@
             const targetMtdTitle = document.getElementById('kpi-target-mtd').previousElementSibling; 
             const targetMtdRateTitle = document.getElementById('kpi-target-mtd-rate').previousElementSibling; 
 
-            if (weekVal === 'Lũy kế MTD') {
+            if (isMtd) {
                 subset.forEach(gs => {
                     totalReg += gs.dang_ky_thang;
                     totalComp += gs.hoan_thanh_thang;
@@ -1848,10 +1897,14 @@
                 document.getElementById('kpi-target-completion-rate').innerText = targetMonthRate + "%";
 
             } else {
-                const wkKey = weekKeys[weekVal];
                 subset.forEach(gs => {
-                    totalReg += gs[wkKey + '_dang_ky'] || 0;
-                    totalComp += gs[wkKey + '_hoan_thanh'] || 0;
+                    currentSelectedWeeks.forEach(wk => {
+                        const wkKey = weekKeys[wk];
+                        if (wkKey) {
+                            totalReg += gs[wkKey + '_dang_ky'] || 0;
+                            totalComp += gs[wkKey + '_hoan_thanh'] || 0;
+                        }
+                    });
                 });
 
                 document.getElementById('kpi-total-reg').innerText = totalReg;
@@ -1860,16 +1913,26 @@
                 const completionRate = totalReg > 0 ? (totalComp / totalReg * 100).toFixed(1) : 0;
                 document.getElementById('kpi-completion-rate').innerText = completionRate + "%";
 
-                // Target Tuần
-                const totalTargetWeek = numGsbh * 4;
-                document.getElementById('kpi-target-mtd').innerText = totalTargetWeek + " ngày";
-                const targetWeekRate = totalTargetWeek > 0 ? (totalComp / totalTargetWeek * 100).toFixed(1) : 0;
+                // Target Tuần (mỗi tuần 4 ngày / GSBH)
+                const targetDaysPerGs = currentSelectedWeeks.length * 4;
+                const totalTargetWeeks = numGsbh * targetDaysPerGs;
+                document.getElementById('kpi-target-mtd').innerText = totalTargetWeeks + " ngày";
+                const targetWeekRate = totalTargetWeeks > 0 ? (totalComp / totalTargetWeeks * 100).toFixed(1) : 0;
                 document.getElementById('kpi-target-mtd-rate').innerText = targetWeekRate + "%";
 
-                // Hide 2 thẻ cuối
-                document.querySelectorAll('.dashboard-month-only-kpi').forEach(el => el.style.display = 'none');
-                if (targetMtdTitle) targetMtdTitle.innerText = "Chỉ Tiêu Target " + weekVal;
-                if (targetMtdRateTitle) targetMtdRateTitle.innerText = "Tỷ Lệ Thực Hiện/Target " + weekVal;
+                const weekLabel = currentSelectedWeeks.join(' + ');
+                if (targetMtdTitle) targetMtdTitle.innerText = `Chỉ Tiêu Target ${weekLabel} (${targetDaysPerGs} ngày/GS)`;
+                if (targetMtdRateTitle) targetMtdRateTitle.innerText = `Tỷ Lệ Thực Hiện/Target ${weekLabel}`;
+
+                if (currentSelectedWeeks.length === 4) {
+                    document.querySelectorAll('.dashboard-month-only-kpi').forEach(el => el.style.display = '');
+                    const totalTargetMonth = numGsbh * 16;
+                    document.getElementById('kpi-total-target').innerText = totalTargetMonth + " ngày";
+                    const targetMonthRate = totalTargetMonth > 0 ? (totalComp / totalTargetMonth * 100).toFixed(1) : 0;
+                    document.getElementById('kpi-target-completion-rate').innerText = targetMonthRate + "%";
+                } else {
+                    document.querySelectorAll('.dashboard-month-only-kpi').forEach(el => el.style.display = 'none');
+                }
             }
         }
 
@@ -1921,7 +1984,7 @@
         
         function renderCharts(subset = detailData) {
             // --- Bar Chart (Zones) ---
-            const weekVal = document.getElementById('dashboard-week-select') ? document.getElementById('dashboard-week-select').value : 'Lũy kế MTD';
+            const isMtd = currentSelectedWeeks.includes('Lũy kế MTD') || currentSelectedWeeks.length === 0;
             const weekKeys = {
                 "Tuần 1": "tuan1",
                 "Tuần 2": "tuan2",
@@ -1939,17 +2002,22 @@
 
                 let totalComp = 0;
                 let targetDays = 0;
-                if (weekVal === 'Lũy kế MTD') {
+                if (isMtd) {
                     subsetVung.forEach(gs => {
                         totalComp += gs.hoan_thanh_thang;
                     });
                     targetDays = numGsbh * currentTargetDays;
                 } else {
-                    const wkKey = weekKeys[weekVal];
+                    const daysPerGs = currentSelectedWeeks.length * 4.0;
                     subsetVung.forEach(gs => {
-                        totalComp += gs[wkKey + '_hoan_thanh'] || 0;
+                        currentSelectedWeeks.forEach(wk => {
+                            const wkKey = weekKeys[wk];
+                            if (wkKey) {
+                                totalComp += gs[wkKey + '_hoan_thanh'] || 0;
+                            }
+                        });
                     });
-                    targetDays = numGsbh * 4.0;
+                    targetDays = numGsbh * daysPerGs;
                 }
 
                 return {
@@ -1964,10 +2032,12 @@
 
             // Update dynamic bar chart title
             let titleText = '';
-            if (weekVal === 'Lũy kế MTD') {
+            if (isMtd) {
                 titleText = `Tỷ Lệ Thực Hiện / Target Theo Vùng (Lũy kế ${currentTargetDays} ngày) (%)`;
             } else {
-                titleText = `Tỷ Lệ Thực Hiện / Target Theo Vùng (${weekVal} - Target 4 ngày) (%)`;
+                const daysPerGs = currentSelectedWeeks.length * 4;
+                const weekLabel = currentSelectedWeeks.join(' + ');
+                titleText = `Tỷ Lệ Thực Hiện / Target Theo Vùng (${weekLabel} - Target ${daysPerGs} ngày) (%)`;
             }
             const barTitleEl = document.getElementById('bar-chart-title');
             if (barTitleEl) {
@@ -2166,44 +2236,136 @@
             updateDashboard();
         }
 
+        // Toggle multi-week mode
+        function toggleMultiWeekMode(isEnabled) {
+            isMultiWeekMode = isEnabled;
+            const labelEl = document.querySelector('.multi-week-checkbox-label');
+            if (labelEl) {
+                if (isEnabled) labelEl.classList.add('active');
+                else labelEl.classList.remove('active');
+            }
+
+            if (!isEnabled) {
+                // When turning off multi-week mode:
+                if (currentSelectedWeeks.includes('Lũy kế MTD') || currentSelectedWeeks.length === 0) {
+                    currentSelectedWeeks = ['Lũy kế MTD'];
+                } else if (currentSelectedWeeks.length > 1) {
+                    // Keep the first selected week
+                    currentSelectedWeeks = [currentSelectedWeeks[0]];
+                }
+            }
+
+            syncDashboardWeekUI();
+            updateDashboard();
+        }
+
         // Week selector callback from Toggle Buttons or Donut Charts
-        function setDashboardWeek(weekVal) {
-            const select = document.getElementById('dashboard-week-select');
-            const currentVal = select ? select.value : 'Lũy kế MTD';
-            // Toggle behavior: clicking active specific week toggles back to 'Lũy kế MTD'
-            let targetVal = weekVal;
-            if (weekVal !== 'Lũy kế MTD' && currentVal === weekVal) {
-                targetVal = 'Lũy kế MTD';
+        function setDashboardWeek(weekVal, event) {
+            if (event && (event.ctrlKey || event.metaKey || event.shiftKey)) {
+                if (!isMultiWeekMode) {
+                    isMultiWeekMode = true;
+                    const cb = document.getElementById('multi-week-checkbox');
+                    if (cb) cb.checked = true;
+                    document.querySelector('.multi-week-checkbox-label')?.classList.add('active');
+                }
             }
-            if (select) {
-                select.value = targetVal;
+
+            if (weekVal === 'Lũy kế MTD') {
+                currentSelectedWeeks = ['Lũy kế MTD'];
+            } else {
+                if (isMultiWeekMode) {
+                    // Remove MTD if present
+                    currentSelectedWeeks = currentSelectedWeeks.filter(w => w !== 'Lũy kế MTD');
+
+                    if (currentSelectedWeeks.includes(weekVal)) {
+                        // Toggle off this week
+                        currentSelectedWeeks = currentSelectedWeeks.filter(w => w !== weekVal);
+                        if (currentSelectedWeeks.length === 0) {
+                            currentSelectedWeeks = ['Lũy kế MTD'];
+                        }
+                    } else {
+                        // Add this week and sort
+                        currentSelectedWeeks.push(weekVal);
+                        const order = { "Tuần 1": 1, "Tuần 2": 2, "Tuần 3": 3, "Tuần 4": 4 };
+                        currentSelectedWeeks.sort((a, b) => (order[a] || 99) - (order[b] || 99));
+                    }
+                } else {
+                    // Single week mode
+                    if (currentSelectedWeeks.length === 1 && currentSelectedWeeks[0] === weekVal) {
+                        currentSelectedWeeks = ['Lũy kế MTD'];
+                    } else {
+                        currentSelectedWeeks = [weekVal];
+                    }
+                }
             }
-            syncDashboardWeekUI(targetVal);
+
+            syncDashboardWeekUI();
             updateDashboard();
         }
 
         function syncDashboardWeekFromSelect(weekVal) {
-            syncDashboardWeekUI(weekVal);
+            if (weekVal === 'Lũy kế MTD') {
+                currentSelectedWeeks = ['Lũy kế MTD'];
+            } else if (weekVal.includes('+')) {
+                currentSelectedWeeks = weekVal.split('+').map(s => s.trim());
+                if (!isMultiWeekMode && currentSelectedWeeks.length > 1) {
+                    isMultiWeekMode = true;
+                    const cb = document.getElementById('multi-week-checkbox');
+                    if (cb) cb.checked = true;
+                    document.querySelector('.multi-week-checkbox-label')?.classList.add('active');
+                }
+            } else {
+                currentSelectedWeeks = [weekVal];
+            }
+            syncDashboardWeekUI();
             updateDashboard();
         }
 
-        function syncDashboardWeekUI(weekVal) {
-            // Update week toggle buttons
+        function syncDashboardWeekUI() {
+            const isMtd = currentSelectedWeeks.includes('Lũy kế MTD') || currentSelectedWeeks.length === 0;
+
+            // 1. Update week toggle buttons
             document.querySelectorAll('.btn-week-toggle').forEach(btn => {
-                if (btn.getAttribute('data-week') === weekVal) {
-                    btn.classList.add('active');
+                const w = btn.getAttribute('data-week');
+                if (isMtd) {
+                    if (w === 'Lũy kế MTD') btn.classList.add('active');
+                    else btn.classList.remove('active');
                 } else {
-                    btn.classList.remove('active');
+                    if (currentSelectedWeeks.includes(w)) btn.classList.add('active');
+                    else btn.classList.remove('active');
                 }
             });
-            // Update donut items highlight
+
+            // 2. Update donut items highlight
             document.querySelectorAll('.donut-item').forEach(item => {
-                if (item.getAttribute('data-week') === weekVal) {
+                const w = item.getAttribute('data-week');
+                if (!isMtd && currentSelectedWeeks.includes(w)) {
                     item.classList.add('active');
                 } else {
                     item.classList.remove('active');
                 }
             });
+
+            // 3. Update dashboard-week-select dropdown
+            const select = document.getElementById('dashboard-week-select');
+            if (select) {
+                if (isMtd) {
+                    select.value = 'Lũy kế MTD';
+                } else if (currentSelectedWeeks.length === 1) {
+                    select.value = currentSelectedWeeks[0];
+                } else {
+                    const combinedText = currentSelectedWeeks.join(' + ');
+                    let multiOpt = select.querySelector('option[data-multi="true"]');
+                    if (!multiOpt) {
+                        multiOpt = document.createElement('option');
+                        multiOpt.setAttribute('data-multi', 'true');
+                        select.appendChild(multiOpt);
+                    }
+                    multiOpt.value = combinedText;
+                    multiOpt.innerText = combinedText;
+                    select.value = combinedText;
+                }
+            }
         }
 
         function updateDashboard() {
