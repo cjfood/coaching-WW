@@ -1464,7 +1464,7 @@
                                 <th style="width: 140px;">Miền</th>
                                 <th style="width: 220px;">Vùng</th>
                                 <th class="text-center" style="width: 100px;">Số GSBH</th>
-                                <th class="text-center" style="width: 110px;">Target MTD</th>
+                                <th class="text-center" id="summary-target-label" style="width: 120px;">Target MTD</th>
                                 <th class="text-center" style="width: 130px;">Tổng Đăng Ký</th>
                                 <th class="text-center" style="width: 130px;">Tổng Hoàn Thành</th>
                                 <th class="text-center" style="width: 150px;">% Thực Hiện/Đăng Ký</th>
@@ -1761,7 +1761,7 @@
 
             // Compute & Render everything
             renderKPIs(detailData);
-            renderSummaryTable(monthObj.summary);
+            renderSummaryTable();
             renderCharts(detailData);
             renderDetailTable();
             
@@ -1936,32 +1936,150 @@
             }
         }
 
-        // 2. Render Summary Table (Hierarchy)
-        function renderSummaryTable(summaryData) {
+        // 2. Render Summary Table (Hierarchy) - Dynamically calculated from detailData, active zone, and active weeks
+        function renderSummaryTable() {
             const tbody = document.getElementById('summary-table-body');
+            if (!tbody) return;
             tbody.innerHTML = '';
-            
-            if (!summaryData) return;
-            currentSummaryData = summaryData;
-            
-            summaryData.forEach(row => {
+
+            const isMtd = currentSelectedWeeks.includes('Lũy kế MTD') || currentSelectedWeeks.length === 0;
+            const weekKeys = {
+                "Tuần 1": "tuan1",
+                "Tuần 2": "tuan2",
+                "Tuần 3": "tuan3",
+                "Tuần 4": "tuan4"
+            };
+
+            const targetDaysPerGs = isMtd ? currentTargetDays : (currentSelectedWeeks.length * 4.0);
+
+            // Update Dynamic Table Headers
+            const targetHeaderCol = document.getElementById('summary-target-header');
+            if (targetHeaderCol) {
+                if (isMtd) {
+                    targetHeaderCol.innerText = `% Thực Hiện/Target (${targetDaysPerGs} ngày)`;
+                } else {
+                    targetHeaderCol.innerText = `% Thực Hiện/Target (${currentSelectedWeeks.join(' + ')} - ${targetDaysPerGs} ngày)`;
+                }
+            }
+
+            const targetColLabel = document.getElementById('summary-target-label');
+            if (targetColLabel) {
+                targetColLabel.innerText = isMtd ? `Target MTD (${targetDaysPerGs} ngày)` : `Target ${currentSelectedWeeks.join(' + ')} (${targetDaysPerGs} ngày)`;
+            }
+
+            // Calculation helper per group
+            const calcGroup = (labelMien, labelVung, gsbhSubset, isMienTotal = false, isGrandTotal = false) => {
+                const totalGs = gsbhSubset.length;
+                let sumReg = 0;
+                let sumComp = 0;
+
+                if (isMtd) {
+                    gsbhSubset.forEach(gs => {
+                        sumReg += gs.dang_ky_thang || 0;
+                        sumComp += gs.hoan_thanh_thang || 0;
+                    });
+                } else {
+                    gsbhSubset.forEach(gs => {
+                        currentSelectedWeeks.forEach(wk => {
+                            const wkKey = weekKeys[wk];
+                            if (wkKey) {
+                                sumReg += gs[wkKey + '_dang_ky'] || 0;
+                                sumComp += gs[wkKey + '_hoan_thanh'] || 0;
+                            }
+                        });
+                    });
+                }
+
+                const pctReg = sumReg > 0 ? (sumComp / sumReg) : 0;
+                const totalTarget = totalGs * targetDaysPerGs;
+                const pctTarget = totalTarget > 0 ? (sumComp / totalTarget) : 0;
+
+                return {
+                    mien: labelMien,
+                    vung: labelVung,
+                    is_mien_total: isMienTotal,
+                    is_grand_total: isGrandTotal,
+                    so_gsbh: totalGs,
+                    target_mtd: Math.round(totalTarget),
+                    dang_ky: sumReg,
+                    hoan_thanh: sumComp,
+                    pct_dang_ky: pctReg,
+                    pct_target: pctTarget,
+                    tuan1_dat: gsbhSubset.filter(gs => gs.tuan1_kpi === 'Đạt').length,
+                    tuan1_pct: totalGs > 0 ? (gsbhSubset.filter(gs => gs.tuan1_kpi === 'Đạt').length / totalGs) : 0,
+                    tuan2_dat: gsbhSubset.filter(gs => gs.tuan2_kpi === 'Đạt').length,
+                    tuan2_pct: totalGs > 0 ? (gsbhSubset.filter(gs => gs.tuan2_kpi === 'Đạt').length / totalGs) : 0,
+                    tuan3_dat: gsbhSubset.filter(gs => gs.tuan3_kpi === 'Đạt').length,
+                    tuan3_pct: totalGs > 0 ? (gsbhSubset.filter(gs => gs.tuan3_kpi === 'Đạt').length / totalGs) : 0,
+                    tuan4_dat: gsbhSubset.filter(gs => gs.tuan4_kpi === 'Đạt').length,
+                    tuan4_pct: totalGs > 0 ? (gsbhSubset.filter(gs => gs.tuan4_kpi === 'Đạt').length / totalGs) : 0,
+                };
+            };
+
+            const zoneFilter = selectedDashboardZone || 'Tất cả';
+            const dynamicSummaryData = [];
+
+            const mienList = ['Miền Bắc', 'Miền Nam'];
+            mienList.forEach(mienName => {
+                const mienGs = detailData.filter(gs => gs.mien === mienName);
+                if (mienGs.length === 0) return;
+
+                const zonesInMien = [...new Set(mienGs.map(gs => gs.vung))].sort();
+                let matchedZonesInMien = 0;
+
+                zonesInMien.forEach(zName => {
+                    if (zoneFilter !== 'Tất cả' && zName !== zoneFilter) return;
+                    const zoneGs = mienGs.filter(gs => gs.vung === zName);
+                    dynamicSummaryData.push(calcGroup(mienName, zName, zoneGs));
+                    matchedZonesInMien++;
+                });
+
+                if (zoneFilter === 'Tất cả') {
+                    dynamicSummaryData.push(calcGroup(mienName, `TỔNG ${mienName.toUpperCase()}`, mienGs, true));
+                } else if (matchedZonesInMien > 0) {
+                    const zoneOnlyGs = mienGs.filter(gs => gs.vung === zoneFilter);
+                    dynamicSummaryData.push(calcGroup(mienName, `TỔNG ${zoneFilter.toUpperCase()}`, zoneOnlyGs, true));
+                }
+            });
+
+            if (zoneFilter === 'Tất cả') {
+                dynamicSummaryData.push(calcGroup('TOÀN QUỐC', 'TỔNG CỘNG TOÀN QUỐC', detailData, false, true));
+            } else {
+                const filteredZoneGs = detailData.filter(gs => gs.vung === zoneFilter);
+                if (filteredZoneGs.length > 0) {
+                    dynamicSummaryData.push(calcGroup('TOÀN QUỐC', `TỔNG CỘNG (${zoneFilter.toUpperCase()})`, filteredZoneGs, false, true));
+                }
+            }
+
+            currentSummaryData = dynamicSummaryData;
+
+            // Render Rows
+            dynamicSummaryData.forEach(row => {
                 const tr = document.createElement('tr');
-                
-                // Add specific styling classes for totals
                 if (row.is_grand_total) {
                     tr.className = 'row-grand-total';
                 } else if (row.is_mien_total) {
                     tr.className = 'row-mien-total';
                 }
-                
-                // Construct HTML row
+
+                // Check active week highlights for the 4 week columns
+                const isT1Active = !isMtd && currentSelectedWeeks.includes('Tuần 1');
+                const isT2Active = !isMtd && currentSelectedWeeks.includes('Tuần 2');
+                const isT3Active = !isMtd && currentSelectedWeeks.includes('Tuần 3');
+                const isT4Active = !isMtd && currentSelectedWeeks.includes('Tuần 4');
+
+                const t1Style = isT1Active ? 'background-color: rgba(197, 43, 39, 0.08); font-weight: 700;' : '';
+                const t2Style = isT2Active ? 'background-color: rgba(197, 43, 39, 0.08); font-weight: 700;' : '';
+                const t3Style = isT3Active ? 'background-color: rgba(197, 43, 39, 0.08); font-weight: 700;' : '';
+                const t4Style = isT4Active ? 'background-color: rgba(197, 43, 39, 0.08); font-weight: 700;' : '';
+
                 tr.innerHTML = `
                     <td>${row.mien}</td>
                     <td>${row.vung}</td>
                     <td class="text-center val-num">${row.so_gsbh}</td>
-                    <td class="text-center val-num">${row.target_mtd}</td>
+                    <td class="text-center val-num" style="font-weight: 600; color: var(--primary);">${row.target_mtd}</td>
                     <td class="text-center val-num">${row.dang_ky}</td>
-                    <td class="text-center val-num">${row.hoan_thanh}</td>
+                    <td class="text-center val-num" style="font-weight: 600;">${row.hoan_thanh}</td>
                     <td class="text-center val-pct">${(row.pct_dang_ky * 100).toFixed(1)}%</td>
                     <td class="text-center">
                         <div class="target-bar-bg">
@@ -1969,10 +2087,10 @@
                         </div>
                         <span class="val-pct">${(row.pct_target * 100).toFixed(1)}%</span>
                     </td>
-                    <td class="text-center val-num">${row.tuan1_dat} <span style="font-size:11px;color:var(--text-muted);">(${(row.tuan1_pct*100).toFixed(0)}%)</span></td>
-                    <td class="text-center val-num">${row.tuan2_dat} <span style="font-size:11px;color:var(--text-muted);">(${(row.tuan2_pct*100).toFixed(0)}%)</span></td>
-                    <td class="text-center val-num">${row.tuan3_dat} <span style="font-size:11px;color:var(--text-muted);">(${(row.tuan3_pct*100).toFixed(0)}%)</span></td>
-                    <td class="text-center val-num">${row.tuan4_dat} <span style="font-size:11px;color:var(--text-muted);">(${(row.tuan4_pct*100).toFixed(0)}%)</span></td>
+                    <td class="text-center val-num" style="${t1Style}">${row.tuan1_dat} <span style="font-size:11px;color:var(--text-muted);">(${(row.tuan1_pct*100).toFixed(0)}%)</span></td>
+                    <td class="text-center val-num" style="${t2Style}">${row.tuan2_dat} <span style="font-size:11px;color:var(--text-muted);">(${(row.tuan2_pct*100).toFixed(0)}%)</span></td>
+                    <td class="text-center val-num" style="${t3Style}">${row.tuan3_dat} <span style="font-size:11px;color:var(--text-muted);">(${(row.tuan3_pct*100).toFixed(0)}%)</span></td>
+                    <td class="text-center val-num" style="${t4Style}">${row.tuan4_dat} <span style="font-size:11px;color:var(--text-muted);">(${(row.tuan4_pct*100).toFixed(0)}%)</span></td>
                 `;
                 tbody.appendChild(tr);
             });
@@ -2376,6 +2494,7 @@
 
             renderKPIs(subset);
             renderCharts(subset);
+            renderSummaryTable();
         }
 
         // 4. Filters Configuration for Detail Report
@@ -2569,15 +2688,17 @@
         function filterRawData() {
             const mienVal = document.getElementById('filter-raw-mien').value;
             const vungVal = document.getElementById('filter-raw-vung').value;
+            const tuanVal = document.getElementById('filter-raw-tuan') ? document.getElementById('filter-raw-tuan').value : '';
             const query = document.getElementById('search-raw').value.toLowerCase().trim();
             const dateVal = document.getElementById('filter-raw-date').value; // format: YYYY-MM-DD
             
             filteredRawData = rawData.filter(row => {
                 const matchMien = !mienVal || row.mien === mienVal;
                 const matchVung = !vungVal || row.vung === vungVal;
+                const matchTuan = !tuanVal || row.tuan === tuanVal;
                 const matchDate = !dateVal || row.tu_ngay === dateVal;
                 
-                if (!matchMien || !matchVung || !matchDate) return false;
+                if (!matchMien || !matchVung || !matchTuan || !matchDate) return false;
                 
                 if (!query) return true;
                 return (
